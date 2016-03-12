@@ -266,6 +266,10 @@ void PythonBinding_Loop()
 
 void PythonBinding_KeyPress(LogiLed::KeyName key)
 {
+	for (int i = 0; i < 2000; i += 1) {
+		LogiLedSetLightingForKeyWithScanCode(i, 0, 0, 0);
+	}
+
 	InvoqueOneIntArg("on_key_press", key);
 }
 
