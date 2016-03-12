@@ -1,5 +1,5 @@
-﻿// <copyright company="Oswald MASKENS" file="Program.cs">
-// Copyright 2014-2016 Oswald MASKENS
+﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE" file="TeethrisSdk.cs">
+// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 // 
@@ -23,7 +23,7 @@ namespace teethris.NET
         private const int WmKeydown = 0x0100;
         private static IntPtr hookId = IntPtr.Zero;
 
-        public static void Run(Action tick, Action<keyboardNames> keyPressed)
+        public static void Run(Action init, Action tick, Action<keyboardNames> keyPressed, Action die)
         {
             hookId = SetHook(HookCallback(keyPressed));
 
