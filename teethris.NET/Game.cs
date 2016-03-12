@@ -17,15 +17,26 @@ namespace teethris.NET
     {
         public static void Main()
         {
-            TeethrisSdk.Run(Tick, KeyPress);
+            var game = new Game();
+            TeethrisSdk.Run(game.Init, game.Tick, game.KeyPress, game.Die);
         }
 
-        private static void KeyPress(keyboardNames key)
+        public void Die()
+        {
+            
+        }
+
+        public void Init()
+        {
+            
+        }
+
+        public void KeyPress(keyboardNames key)
         {
             Console.WriteLine($"Key pressed {key}");
         }
 
-        private static void Tick()
+        public void Tick()
         {
             Console.WriteLine("Console tick");
         }
