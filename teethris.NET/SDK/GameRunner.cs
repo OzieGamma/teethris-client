@@ -20,21 +20,9 @@ namespace teethris.NET.SDK
         private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net"); //new Uri("http://localhost:3000/");//
 
         private T game;
-        private readonly MessageNetwork network;
+        private MessageNetwork network;
 
         private bool active;
-
-        public GameRunner()
-        {
-            this.network = new MessageNetwork(this.KeyRecieved, Uri);
-
-            // Wait to be assigned an id
-            while (this.network.Id == -1)
-            {
-                Console.WriteLine("Waiting for ID");
-                Thread.Sleep(2);
-            }
-        }
 
         /// <summary>
         ///     Event handler for a pressed key
@@ -119,6 +107,16 @@ namespace teethris.NET.SDK
             Animations.Start();
 
             this.game = new T();
+
+            this.network = new MessageNetwork(this.KeyRecieved, Uri);
+
+            // Wait to be assigned an id
+            while (this.network.Id == -1)
+            {
+                Console.WriteLine("Waiting for ID");
+                Thread.Sleep(2);
+            }
+
             this.game.Init(this.network.Id);
             this.active = true;
         }
