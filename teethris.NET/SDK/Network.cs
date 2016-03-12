@@ -18,11 +18,12 @@ namespace teethris.NET.SDK
     {
         private const string MsgChannel = "msg";
         private const string IdChannel = "id";
+        private const string DisconnectChannel = "disconnect";
         private readonly Socket socket;
 
         public long Id { get; set; }
 
-        public MessageNetwork(Action<KeyboardNames> keyRecieved, Uri uri)
+        public MessageNetwork(Action<KeyboardNames> keyRecieved, Uri uri, Action Disconnect)
         {
             this.Id = -1;
 
@@ -33,7 +34,7 @@ namespace teethris.NET.SDK
             this.socket.On(MsgChannel, data =>
             {
                 KeyboardNames key;
-                Console.WriteLine($"Got msg {(string)data}");
+                Console.WriteLine($"Got msg {(string) data}");
                 var success = Enum.TryParse((string) data, out key);
                 if (!success)
                 {
@@ -44,8 +45,16 @@ namespace teethris.NET.SDK
                 }
             });
 
-            this.socket.On(IdChannel, data => { this.Id = (long) data;
-                Console.WriteLine($"Got id {(long)data}");
+            this.socket.On(IdChannel, data =>
+            {
+                this.Id = (long) data;
+                Console.WriteLine($"Got id {(long) data}");
+            });
+
+            this.socket.On(DisconnectChannel, data =>
+            {
+                Console.WriteLine("Lost connection");
+                Disconnect();
             });
         }
 
