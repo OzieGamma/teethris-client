@@ -9,6 +9,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using LedCSharp;
@@ -20,6 +21,7 @@ namespace teethris.NET.SDK
     {
         public static void Start()
         {
+            Countdown();
             foreach (var key in KeyboardLayout.Instance.IllegalKeys)
             {
                 SetLighting(key, PlayerColor.Red, 100);
@@ -38,6 +40,75 @@ namespace teethris.NET.SDK
             Console.WriteLine("You won !");
             LogiLedFlashLighting(0, 100, 0, 1200, 140);
             Thread.Sleep(1300);
+        }
+
+        public static void Countdown()
+        {
+            ISet<KeyboardNames> threeSeconds;
+            ISet<KeyboardNames> twoSeconds;
+            ISet<KeyboardNames> oneSecond;
+
+
+            threeSeconds =
+                new HashSet<KeyboardNames>(new List<KeyboardNames>
+                {
+                    KeyboardNames.NUM_LOCK,
+                    KeyboardNames.NUM_ENTER,
+                    KeyboardNames.NUM_SLASH,
+                    KeyboardNames.NUM_ASTERISK,
+                    KeyboardNames.NUM_MINUS,
+                    KeyboardNames.NUM_PLUS,
+                    KeyboardNames.NUM_PERIOD,
+                    KeyboardNames.NUM_ZERO,
+                    KeyboardNames.NUM_SIX,
+                    KeyboardNames.NUM_FIVE,
+                    KeyboardNames.NUM_FOUR
+                });
+
+            twoSeconds =
+                new HashSet<KeyboardNames>(new List<KeyboardNames>
+                {
+                    KeyboardNames.NUM_LOCK,
+                    KeyboardNames.NUM_ONE,
+                    KeyboardNames.NUM_SLASH,
+                    KeyboardNames.NUM_ASTERISK,
+                    KeyboardNames.NUM_MINUS,
+                    KeyboardNames.NUM_PLUS,
+                    KeyboardNames.NUM_PERIOD,
+                    KeyboardNames.NUM_ZERO,
+                    KeyboardNames.NUM_SIX,
+                    KeyboardNames.NUM_FIVE,
+                    KeyboardNames.NUM_FOUR
+                });
+
+            oneSecond =
+                new HashSet<KeyboardNames>(new List<KeyboardNames>
+                {
+                    KeyboardNames.NUM_ENTER,
+                    KeyboardNames.NUM_MINUS,
+                    KeyboardNames.NUM_PLUS,
+                });
+
+            foreach (var key in threeSeconds)
+            {
+                SetLighting(key, PlayerColor.Red, 100);
+            }
+            Thread.Sleep(1500);
+            LogiLedSetLighting(0, 0, 0);
+            foreach (var key in twoSeconds)
+            {
+                SetLighting(key, PlayerColor.Red, 100);
+            }
+            Thread.Sleep(1500);
+            LogiLedSetLighting(0, 0, 0);
+
+            foreach (var key in oneSecond)
+            {
+                SetLighting(key, PlayerColor.Red, 100);
+            }
+            Thread.Sleep(1500);
+            LogiLedSetLighting(0, 0, 0);
+
         }
     }
 }
