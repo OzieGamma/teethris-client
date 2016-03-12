@@ -16,18 +16,20 @@ namespace teethris.NET.SDK
 {
     public class MessageNetwork
     {
-        private const string ChannelName = "chat message";
+        private readonly string channelName;
         private readonly Socket socket;
-        private readonly IGame game;
 
-        public MessageNetwork(IGame game, Uri uri)
+        public MessageNetwork(Action<KeyboardNames> keyRecieved, Uri uri, string channelName)
         {
-            this.game = game;
+            this.channelName = channelName;
             this.socket = IO.Socket(uri);
 
-            this.socket.On(Socket.EVENT_CONNECT, () => { /* this.socket.Emit(ChannelName, "hi"); */ });
+            this.socket.On(Socket.EVENT_CONNECT, () =>
+            {
+                /* this.socket.Emit(ChannelName, "hi"); */
+            });
 
-            this.socket.On(ChannelName, data =>
+            this.socket.On(channelName, data =>
             {
                 KeyboardNames key;
                 var success = Enum.TryParse((string) data, out key);
@@ -36,14 +38,14 @@ namespace teethris.NET.SDK
                     throw new SocketIOException("Couldn't parse");
                 }
                 {
-                    this.game.KeyReceived(key);
+                    keyRecieved(key);
                 }
             });
         }
 
-        public void Send(string message)
+        public void SendKey(KeyboardNames key)
         {
-            this.socket.Emit(ChannelName, message);
+            this.socket.Emit(this.channelName, key.ToString());
         }
     }
 }

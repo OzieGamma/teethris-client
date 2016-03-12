@@ -17,6 +17,9 @@ namespace teethris.NET
 {
     public class Game : IGame
     {
+        private const string ChannelName = "chat message";
+        private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net");
+
         public static void Main()
         {
             Engine.Run<Game>();
@@ -24,19 +27,20 @@ namespace teethris.NET
 
         private readonly Snake player;
         private readonly Snake enemy;
+        private readonly MessageNetwork network;
 
         public Game()
         {
-            Network.init(this);
-            
             if (!LogiLedInit())
             {
                 throw new LogitechIsBadException("Logitech engineers ...");
             }
             LogiLedSaveCurrentLighting();
             LogiLedSetLighting(0, 0, 0);
+            this.StartAnimation();
             this.player = new Snake(KeyboardNames.S, PlayerColor.Green);
             this.enemy = new Snake(KeyboardNames.NUM_SIX, PlayerColor.Blue);
+            this.network = new MessageNetwork(this.KeyReceived, Uri, ChannelName);
         }
 
         public void KeyPress(KeyboardNames key)
@@ -46,13 +50,13 @@ namespace teethris.NET
                 
             }
             Console.WriteLine($"Key pressed {key}");
-            Network.send(key.ToString());
-            this.KeyReceived(key.ToString());
+            this.network.SendKey(key);
+            this.KeyReceived(key);
             this.player.AddIfNeighbour(key);
         }
         
-        public void KeyReceived(String key){
-
+        public void KeyReceived(KeyboardNames key){
+            Console.WriteLine($"Key recieved: {key}");
         }
         
         public void Tick()
@@ -68,6 +72,7 @@ namespace teethris.NET
 
         public void StartAnimation()
         {
+
         }
     }
 }
