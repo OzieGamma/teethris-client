@@ -19,7 +19,6 @@ namespace teethris.NET
     {
         private readonly List<keyboardNames> keys = new List<keyboardNames>();
         private readonly PlayerColor color;
-        private keyboardNames s;
 
         public Snake(keyboardNames key, PlayerColor color)
         {
@@ -29,14 +28,9 @@ namespace teethris.NET
             SetLighting(key, color, 100);
         }
 
-        public Snake(keyboardNames s)
-        {
-            this.s = s;
-        }
+        public keyboardNames Head => this.keys.Last();
 
-        public keyboardNames Head => this.keys.First();
-
-        public void Add(keyboardNames key)
+        public void AddIfNeighbour(keyboardNames key)
         {
             SetLighting(this.Head, this.color, 30);
 

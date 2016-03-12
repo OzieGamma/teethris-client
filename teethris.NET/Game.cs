@@ -26,9 +26,13 @@ namespace teethris.NET
 
         public Game()
         {
-            LogiLedInit();
+            if (!LogiLedInit())
+            {
+                throw new LogitechIsBadException("Logitech engineers ...");
+            }
             LogiLedSaveCurrentLighting();
-            this.player = new Snake(keyboardNames.S);
+            LogiLedSetLighting(0, 0, 0);
+            this.player = new Snake(keyboardNames.S, PlayerColor.Green);
         }
 
         public void KeyPress(keyboardNames key)
