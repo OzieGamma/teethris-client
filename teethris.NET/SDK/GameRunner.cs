@@ -71,7 +71,10 @@ namespace teethris.NET.SDK
                 {
                     this.AcknowledgeState(GameState.Won);
                 }
-                this.AcknowledgeState(this.game.KeyPress(key));
+                else
+                {
+                    this.AcknowledgeState(this.game.KeyReceived(key));
+                }
             }
         }
 
