@@ -111,6 +111,8 @@ namespace LedCSharp
         ARROW_RIGHT = 0x14D,
         NUM_ZERO = 0x52,
         NUM_PERIOD = 0x53,
+        LEFT_BACKSLASH = 93,
+        RIGHT_BACKSLASH = 86
 
     };
 
