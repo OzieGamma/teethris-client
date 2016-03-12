@@ -17,8 +17,8 @@ namespace teethris.NET.SDK
 {
     public class GameRunner<T> where T : class, IGame, new()
     {
-        private static readonly Uri Uri = //new Uri("http://borisjeltsin.azurewebsites.net");
-            new Uri("http://localhost:3000/");//
+        private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net");
+            //new Uri("http://localhost:3000/");//
 
         private T game;
         private MessageNetwork network;
