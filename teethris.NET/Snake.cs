@@ -11,16 +11,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using LedCSharp;
+using teethris.NET.SDK;
 using static LedCSharp.LogitechGSDK;
 
 namespace teethris.NET
 {
     public class Snake
     {
-        private readonly List<keyboardNames> keys = new List<keyboardNames>();
+        private readonly List<KeyboardNames> keys = new List<KeyboardNames>();
         private readonly PlayerColor color;
 
-        public Snake(keyboardNames key, PlayerColor color)
+        public Snake(KeyboardNames key, PlayerColor color)
         {
             this.color = color;
             this.keys.Add(key);
@@ -28,15 +29,18 @@ namespace teethris.NET
             SetLighting(key, color, 100);
         }
 
-        public keyboardNames Head => this.keys.Last();
+        public KeyboardNames Head => this.keys.Last();
 
-        public void AddIfNeighbour(keyboardNames key)
+        public bool AddIfNeighbour(KeyboardNames key)
         {
+            if (this.keys.Contains(key) || !KeyboardLayout.Instance[this.Head].Contains(key)) return false;
+
             SetLighting(this.Head, this.color, 30);
 
             this.keys.Add(key);
 
             SetLighting(this.Head, this.color, 100);
+            return true;
         }
     }
 }

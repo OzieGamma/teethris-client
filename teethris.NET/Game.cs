@@ -19,10 +19,11 @@ namespace teethris.NET
     {
         public static void Main()
         {
-            TeethrisSdk.Run<Game>();
+            Engine.Run<Game>();
         }
 
         private readonly Snake player;
+        private readonly Snake enemy;
 
         public Game()
         {
@@ -32,13 +33,16 @@ namespace teethris.NET
             }
             LogiLedSaveCurrentLighting();
             LogiLedSetLighting(0, 0, 0);
-            this.player = new Snake(keyboardNames.S, PlayerColor.Green);
+            this.player = new Snake(KeyboardNames.S, PlayerColor.Green);
+            this.enemy = new Snake(KeyboardNames.NUM_SIX, PlayerColor.Blue);
         }
 
-        public void KeyPress(keyboardNames key)
+        public void KeyPress(KeyboardNames key)
         {
-            Console.WriteLine($"Key pressed {key}");
-            this.player.AddIfNeighbour(key);
+            if (!this.player.AddIfNeighbour(key))
+            {
+                
+            }
         }
 
         public void Tick()

@@ -35,11 +35,11 @@ namespace teethris.NET.SDK
         ///     Whether the key pressed event should be passed to the next piece of
         ///     software down the chain.
         /// </returns>
-        public bool KeyPressed(keyboardNames key)
+        public bool KeyPressed(KeyboardNames key)
         {
             if (this.active)
             {
-                if (key == keyboardNames.ESC)
+                if (key == KeyboardNames.ESC)
                 {
                     this.game.Dispose();
                     this.game = null;
@@ -49,7 +49,7 @@ namespace teethris.NET.SDK
                 this.game.KeyPress(key);
                 return false;
             }
-            if (key == keyboardNames.ESC)
+            if (key == KeyboardNames.ESC)
             {
                 this.game = new T();
                 this.active = true;
