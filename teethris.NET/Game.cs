@@ -47,7 +47,6 @@ namespace teethris.NET
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
     }
     

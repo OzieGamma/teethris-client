@@ -52,6 +52,7 @@ namespace teethris.NET.SDK
             if (key == keyboardNames.ESC)
             {
                 this.game = new T();
+                this.active = true;
                 return false;
             }
             return true;
