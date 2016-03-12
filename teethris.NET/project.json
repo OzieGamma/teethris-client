@@ -1,0 +1,27 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "teethris.NET Console Application",
+  "authors": [ "Oswald MASKENS(OzieGamma), Tom Eelbode" ],
+  "tags": [ "" ],
+  "projectUrl": "https://github.com/OzieGamma/teethris-client",
+  "licenseUrl": "https://github.com/OzieGamma/teethris-client/blob/master/LICENSE",
+
+  "compilationOptions": {
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+  },
+
+  "commands": {
+    "teethris.NET": "teethris.NET"
+  },
+
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Windows.Forms": "4.0.0.0"
+      }
+    }
+  }
+}
