@@ -156,7 +156,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="KeyCodeUniformizer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PythonBinding.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="KeyCodeUniformizer.h" />
+    <ClInclude Include="PythonBinding.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
