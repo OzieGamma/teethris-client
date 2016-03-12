@@ -1,3 +1,4 @@
+using System;
 using Quobject.SocketIoClientDotNet.Client;
 
 namespace teethris.NET
