@@ -112,7 +112,7 @@ namespace teethris.NET.SDK
 
             this.game = new T();
 
-            this.network = new MessageNetwork(this.KeyRecieved, Uri, this.EndGame);
+            this.network = new MessageNetwork(this.KeyRecieved, Uri);
 
             // Wait to be assigned an id
             while (this.network.Id == -1)
@@ -129,6 +129,7 @@ namespace teethris.NET.SDK
         {
             Console.WriteLine("End of the game !");
             this.game = null;
+            this.network.Dispose();
             this.active = false;
 
             LogiLedRestoreLighting();

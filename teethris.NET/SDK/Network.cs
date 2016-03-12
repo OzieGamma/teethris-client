@@ -14,16 +14,15 @@ using Quobject.SocketIoClientDotNet.Client;
 
 namespace teethris.NET.SDK
 {
-    public class MessageNetwork
+    public class MessageNetwork : IDisposable
     {
         private const string MsgChannel = "msg";
         private const string IdChannel = "id";
-        private const string DisconnectChannel = "disconnect";
         private readonly Socket socket;
 
         public long Id { get; set; }
 
-        public MessageNetwork(Action<KeyboardNames> keyRecieved, Uri uri, Action Disconnect)
+        public MessageNetwork(Action<KeyboardNames> keyRecieved, Uri uri)
         {
             this.Id = -1;
 
@@ -50,17 +49,16 @@ namespace teethris.NET.SDK
                 this.Id = (long) data;
                 Console.WriteLine($"Got id {(long) data}");
             });
-
-            this.socket.On(DisconnectChannel, data =>
-            {
-                Console.WriteLine("Lost connection");
-                Disconnect();
-            });
         }
 
         public void SendKey(KeyboardNames key)
         {
             this.socket.Emit(MsgChannel, key.ToString());
+        }
+
+        public void Dispose()
+        {
+            this.socket.Close();
         }
     }
 }
