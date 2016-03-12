@@ -1,4 +1,4 @@
-﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="Game.cs">
+﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="GameManager.cs">
 // Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -11,32 +11,23 @@
 using System;
 using LedCSharp;
 
-namespace teethris.NET
+namespace teethris.NET.SDK
 {
-    public class Game : IGame
+    public class GameManager
     {
-        public static void Main()
+        public GameManager(Game game)
         {
-            var game = new Game();
-            TeethrisSdk.Run(game);
-        }
-
-        public void Die()
-        {
-        }
-
-        public void Init()
-        {
-        }
-
-        public void KeyPress(keyboardNames key)
-        {
-            Console.WriteLine($"Key pressed {key}");
+            throw new NotImplementedException();
         }
 
         public void Tick()
         {
-            Console.WriteLine("Console tick");
+            throw new NotImplementedException();
+        }
+
+        public bool KeyPressed(keyboardNames obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }

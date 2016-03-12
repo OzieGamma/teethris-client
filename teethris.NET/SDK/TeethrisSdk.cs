@@ -1,5 +1,5 @@
-﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE" file="TeethrisSdk.cs">
-// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE
+﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="TeethrisSdk.cs">
+// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 // 
@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using LedCSharp;
 
-namespace teethris.NET
+namespace teethris.NET.SDK
 {
     public class TeethrisSdk
     {
@@ -23,12 +23,14 @@ namespace teethris.NET
         private const int WmKeydown = 0x0100;
         private static IntPtr hookId = IntPtr.Zero;
 
-        public static void Run(Action init, Action tick, Action<keyboardNames> keyPressed, Action die)
+        public static void Run(Game game)
         {
-            hookId = SetHook(HookCallback(keyPressed));
+            var gameManager = new GameManager(game);
+
+            hookId = SetHook(HookCallback(gameManager.KeyPressed));
 
             var timer = new Timer {Interval = 10};
-            timer.Tick += (sender, args) => tick();
+            timer.Tick += (sender, args) => gameManager.Tick();
             timer.Start();
 
             Application.Run();
@@ -50,17 +52,23 @@ namespace teethris.NET
 
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        private static LowLevelKeyboardProc HookCallback(Action<keyboardNames> keyPressed)
+        private static LowLevelKeyboardProc HookCallback(Func<keyboardNames, bool> keyPressed)
         {
             return (nCode, wParam, lParam) =>
             {
+                var callNext = true;
+
                 if ((nCode >= 0) && (wParam == (IntPtr) WmKeydown))
                 {
                     var vkCode = Marshal.ReadInt32(lParam);
-
-                    keyPressed(VkToKeyboardName(vkCode));
+                    callNext = keyPressed(VkToKeyboardName(vkCode));
                 }
-                return CallNextHookEx(hookId, nCode, wParam, lParam);
+
+                if (callNext)
+                {
+                    return CallNextHookEx(hookId, nCode, wParam, lParam);
+                }
+                return IntPtr.Zero;
             };
         }
 
