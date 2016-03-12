@@ -18,12 +18,14 @@ namespace teethris.NET
     {
         public static void Main()
         {
+            Network.init();
             TeethrisSdk.Run<Game>();
         }
 
         public void KeyPress(keyboardNames key)
         {
             Console.WriteLine($"Key pressed {key}");
+            Network.send(key.ToString());
         }
 
         public void Tick()
