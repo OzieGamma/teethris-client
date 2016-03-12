@@ -30,13 +30,13 @@ namespace teethris.NET
         {
             if ((clientNumber%2) == 0)
             {
-                this.player = new Snake(KeyboardNames.END, PlayerColor.Green);
-                this.enemy = new Snake(KeyboardNames.NUM_SIX, PlayerColor.Blue);
+                this.player = new Snake(KeyboardNames.S, PlayerColor.Green);
+                this.enemy = new Snake(KeyboardNames.J, PlayerColor.Blue);
             }
             else
             {
-                this.player = new Snake(KeyboardNames.NUM_SIX, PlayerColor.Green);
-                this.enemy = new Snake(KeyboardNames.END, PlayerColor.Blue);
+                this.player = new Snake(KeyboardNames.J, PlayerColor.Green);
+                this.enemy = new Snake(KeyboardNames.S, PlayerColor.Blue);
             }
         }
 
