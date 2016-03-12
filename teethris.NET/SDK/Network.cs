@@ -1,5 +1,5 @@
-// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="Network.cs">
-// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD
+// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoï¿½ PETARD" file="Network.cs">
+// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoï¿½ PETARD
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 // 
@@ -18,13 +18,17 @@ namespace teethris.NET.SDK
     {
         private const string MsgChannel = "msg";
         private const string IdChannel = "id";
+        private const string ReadyChannel = "ready";
+        
         private readonly Socket socket;
 
         public long Id { get; set; }
+        public bool Ready {get; set; }
 
         public MessageNetwork(Action<KeyboardNames> keyRecieved, Uri uri)
         {
             this.Id = -1;
+            this.Ready = false;
 
             this.socket = IO.Socket(uri);
 
@@ -49,6 +53,13 @@ namespace teethris.NET.SDK
                 this.Id = (long) data;
                 Console.WriteLine($"Got id {(long) data}");
             });
+            
+            this.socket.On(ReadyChannel, data =>
+            {
+                this.Ready = true;
+                Console.WriteLine($"Got ready signal {(string) data}");
+            });
+            this.socket.Emit(ReadyChannel, "ready");
         }
 
         public void SendKey(KeyboardNames key)
