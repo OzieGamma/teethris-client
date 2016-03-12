@@ -1,5 +1,5 @@
-﻿// <copyright company="Oswald MASKENS" file="Game.cs">
-// Copyright 2014-2016 Oswald MASKENS
+﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="Game.cs">
+// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 // 
@@ -13,22 +13,20 @@ using LedCSharp;
 
 namespace teethris.NET
 {
-    public class Game
+    public class Game : IGame
     {
         public static void Main()
         {
             var game = new Game();
-            TeethrisSdk.Run(game.Init, game.Tick, game.KeyPress, game.Die);
+            TeethrisSdk.Run(game);
         }
 
         public void Die()
         {
-            
         }
 
         public void Init()
         {
-            
         }
 
         public void KeyPress(keyboardNames key)
