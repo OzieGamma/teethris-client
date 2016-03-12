@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using LedCSharp;
 
-namespace teethris.NET
+namespace teethris.NET.SDK
 {
     public class TeethrisSdk
     {
@@ -56,7 +56,7 @@ namespace teethris.NET
         {
             return (nCode, wParam, lParam) =>
             {
-                bool callNext = true;
+                var callNext = true;
 
                 if ((nCode >= 0) && (wParam == (IntPtr) WmKeydown))
                 {

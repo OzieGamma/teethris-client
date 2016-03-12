@@ -10,7 +10,7 @@
 
 using LedCSharp;
 
-namespace teethris.NET
+namespace teethris.NET.SDK
 {
     internal interface IGame
     {

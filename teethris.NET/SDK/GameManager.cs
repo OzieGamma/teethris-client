@@ -11,7 +11,7 @@
 using System;
 using LedCSharp;
 
-namespace teethris.NET
+namespace teethris.NET.SDK
 {
     public class GameManager
     {
