@@ -38,10 +38,10 @@ namespace teethris.NET.SDK
         {
             Console.WriteLine($"Key pressed {key}");
 
-             this.network.SendKey(key);
 
             if (this.active)
             {
+                this.network.SendKey(key);
                 if (key == KeyboardNames.ESC)
                 {
                     this.EndGame();
