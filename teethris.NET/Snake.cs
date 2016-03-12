@@ -33,7 +33,7 @@ namespace teethris.NET
 
         public void ChangeHead(KeyboardNames key)
         {
-            SetLighting(this.Head, this.color, 30);
+            SetLighting(this.Head, this.color, 50);
             this.Head = key;
             SetLighting(this.Head, this.color, 100);
             this.Size += 1;
