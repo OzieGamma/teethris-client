@@ -18,24 +18,31 @@ namespace teethris.NET
     public class Snake
     {
         private readonly List<keyboardNames> keys = new List<keyboardNames>();
-        private readonly int friend;
+        private readonly PlayerColor color;
+        private keyboardNames s;
 
-        public Snake(keyboardNames key, int friend)
+        public Snake(keyboardNames key, PlayerColor color)
         {
-            this.friend = friend;
+            this.color = color;
             this.keys.Add(key);
-            SetLighting(key, 0, 100 - (friend*100), friend*100);
+
+            SetLighting(key, color, 100);
+        }
+
+        public Snake(keyboardNames s)
+        {
+            this.s = s;
         }
 
         public keyboardNames Head => this.keys.First();
 
         public void Add(keyboardNames key)
         {
-            SetLighting(this.Head, 0, 30 - (this.friend*30), this.friend*30);
+            SetLighting(this.Head, this.color, 30);
 
             this.keys.Add(key);
 
-            SetLighting(this.Head, 0, 100 - (this.friend*100), this.friend*100);
+            SetLighting(this.Head, this.color, 100);
         }
     }
 }

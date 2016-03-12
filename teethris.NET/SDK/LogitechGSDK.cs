@@ -8,7 +8,9 @@
 // Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 // </copyright>
 
+using System;
 using System.Runtime.InteropServices;
+using teethris.NET;
 
 namespace LedCSharp
 {
@@ -192,6 +194,19 @@ namespace LedCSharp
         public static bool SetLighting(keyboardNames keyCode, int redPercentage, int greenPercentage, int bluePercentage)
         {
             return LogiLedSetLightingForKeyWithKeyName(keyCode, redPercentage, greenPercentage, bluePercentage);
+        }
+
+        public static bool SetLighting(keyboardNames keyCode, PlayerColor color, int percentage)
+        {
+            switch (color)
+            {
+                case PlayerColor.Blue:
+                    return LogiLedSetLightingForKeyWithKeyName(keyCode, 0, 0, percentage);
+                case PlayerColor.Green:
+                    return LogiLedSetLightingForKeyWithKeyName(keyCode, 0, percentage, 0);
+            }
+
+            throw new InvalidOperationException("You shouldn't be here, not a valid player color !");
         }
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]

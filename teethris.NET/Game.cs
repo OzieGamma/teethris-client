@@ -22,16 +22,19 @@ namespace teethris.NET
             TeethrisSdk.Run<Game>();
         }
 
+        private readonly Snake player;
+
         public Game()
         {
             LogiLedInit();
             LogiLedSaveCurrentLighting();
-            var friend = new Snake(keyboardNames.S);
+            this.player = new Snake(keyboardNames.S);
         }
 
         public void KeyPress(keyboardNames key)
         {
             Console.WriteLine($"Key pressed {key}");
+            this.player.AddIfNeighbour(key);
         }
 
         public void Tick()
