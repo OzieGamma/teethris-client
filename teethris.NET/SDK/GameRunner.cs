@@ -108,8 +108,6 @@ namespace teethris.NET.SDK
             LogiLedSaveCurrentLighting();
             LogiLedSetLighting(0, 0, 0);
 
-            Animations.Start();
-
             this.game = new T();
 
             this.network = new MessageNetwork(this.KeyRecieved, Uri);
@@ -127,6 +125,8 @@ namespace teethris.NET.SDK
                 Console.WriteLine("Waiting for ready signal");
                 Thread.Sleep(2);
             }
+
+            Animations.Start();
 
             this.game.Init(this.network.Id);
             this.active = true;
