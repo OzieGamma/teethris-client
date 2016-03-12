@@ -1,10 +1,19 @@
-﻿using System;
-using System.Collections;
+﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="LogitechGSDK.cs">
+// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+// 
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+// Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+// </copyright>
+
+using System;
 using System.Runtime.InteropServices;
+using teethris.NET;
 
 namespace LedCSharp
 {
-
     public enum keyboardNames
     {
         ESC = 0x01,
@@ -113,8 +122,7 @@ namespace LedCSharp
         NUM_PERIOD = 0x53,
         LEFT_BACKSLASH = 93,
         RIGHT_BACKSLASH = 86
-
-    };
+    }
 
     public class LogitechGSDK
     {
@@ -123,14 +131,16 @@ namespace LedCSharp
         private const int LOGI_DEVICETYPE_RGB_ORD = 1;
         private const int LOGI_DEVICETYPE_PERKEY_RGB_ORD = 2;
 
-        public const int LOGI_DEVICETYPE_MONOCHROME = (1 << LOGI_DEVICETYPE_MONOCHROME_ORD);
-        public const int LOGI_DEVICETYPE_RGB = (1 << LOGI_DEVICETYPE_RGB_ORD);
-        public const int LOGI_DEVICETYPE_PERKEY_RGB = (1 << LOGI_DEVICETYPE_PERKEY_RGB_ORD);
+        public const int LOGI_DEVICETYPE_MONOCHROME = 1 << LOGI_DEVICETYPE_MONOCHROME_ORD;
+        public const int LOGI_DEVICETYPE_RGB = 1 << LOGI_DEVICETYPE_RGB_ORD;
+        public const int LOGI_DEVICETYPE_PERKEY_RGB = 1 << LOGI_DEVICETYPE_PERKEY_RGB_ORD;
         public const int LOGI_LED_BITMAP_WIDTH = 21;
         public const int LOGI_LED_BITMAP_HEIGHT = 6;
         public const int LOGI_LED_BITMAP_BYTES_PER_KEY = 4;
 
-        public const int LOGI_LED_BITMAP_SIZE = LOGI_LED_BITMAP_WIDTH * LOGI_LED_BITMAP_HEIGHT * LOGI_LED_BITMAP_BYTES_PER_KEY;
+        public const int LOGI_LED_BITMAP_SIZE =
+            LOGI_LED_BITMAP_WIDTH*LOGI_LED_BITMAP_HEIGHT*LOGI_LED_BITMAP_BYTES_PER_KEY;
+
         public const int LOGI_LED_DURATION_INFINITE = 0;
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
@@ -152,10 +162,12 @@ namespace LedCSharp
         public static extern bool LogiLedRestoreLighting();
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool LogiLedFlashLighting(int redPercentage, int greenPercentage, int bluePercentage, int milliSecondsDuration, int milliSecondsInterval);
+        public static extern bool LogiLedFlashLighting(int redPercentage, int greenPercentage, int bluePercentage,
+            int milliSecondsDuration, int milliSecondsInterval);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool LogiLedPulseLighting(int redPercentage, int greenPercentage, int bluePercentage, int milliSecondsDuration, int milliSecondsInterval);
+        public static extern bool LogiLedPulseLighting(int redPercentage, int greenPercentage, int bluePercentage,
+            int milliSecondsDuration, int milliSecondsInterval);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool LogiLedStopEffects();
@@ -164,16 +176,38 @@ namespace LedCSharp
         public static extern bool LogiLedSetLightingFromBitmap(byte[] bitmap);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool LogiLedSetLightingForKeyWithScanCode(int keyCode, int redPercentage, int greenPercentage, int bluePercentage);
+        public static extern bool LogiLedSetLightingForKeyWithScanCode(int keyCode, int redPercentage,
+            int greenPercentage, int bluePercentage);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool LogiLedSetLightingForKeyWithHidCode(int keyCode, int redPercentage, int greenPercentage, int bluePercentage);
+        public static extern bool LogiLedSetLightingForKeyWithHidCode(int keyCode, int redPercentage,
+            int greenPercentage, int bluePercentage);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool LogiLedSetLightingForKeyWithQuartzCode(int keyCode, int redPercentage, int greenPercentage, int bluePercentage);
+        public static extern bool LogiLedSetLightingForKeyWithQuartzCode(int keyCode, int redPercentage,
+            int greenPercentage, int bluePercentage);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool LogiLedSetLightingForKeyWithKeyName(keyboardNames keyCode, int redPercentage, int greenPercentage, int bluePercentage);
+        public static extern bool LogiLedSetLightingForKeyWithKeyName(keyboardNames keyCode, int redPercentage,
+            int greenPercentage, int bluePercentage);
+
+        public static bool SetLighting(keyboardNames keyCode, int redPercentage, int greenPercentage, int bluePercentage)
+        {
+            return LogiLedSetLightingForKeyWithKeyName(keyCode, redPercentage, greenPercentage, bluePercentage);
+        }
+
+        public static bool SetLighting(keyboardNames keyCode, PlayerColor color, int percentage)
+        {
+            switch (color)
+            {
+                case PlayerColor.Blue:
+                    return LogiLedSetLightingForKeyWithKeyName(keyCode, 0, 0, percentage);
+                case PlayerColor.Green:
+                    return LogiLedSetLightingForKeyWithKeyName(keyCode, 0, percentage, 0);
+            }
+
+            throw new InvalidOperationException("You shouldn't be here, not a valid player color !");
+        }
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool LogiLedSaveLightingForKey(keyboardNames keyName);
@@ -182,10 +216,13 @@ namespace LedCSharp
         public static extern bool LogiLedRestoreLightingForKey(keyboardNames keyName);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool LogiLedFlashSingleKey(keyboardNames keyName, int redPercentage, int greenPercentage, int bluePercentage, int msDuration, int msInterval);
+        public static extern bool LogiLedFlashSingleKey(keyboardNames keyName, int redPercentage, int greenPercentage,
+            int bluePercentage, int msDuration, int msInterval);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool LogiLedPulseSingleKey(keyboardNames keyName, int startRedPercentage, int startGreenPercentage, int startBluePercentage, int finishRedPercentage, int finishGreenPercentage, int finishBluePercentage, int msDuration, bool isInfinite);
+        public static extern bool LogiLedPulseSingleKey(keyboardNames keyName, int startRedPercentage,
+            int startGreenPercentage, int startBluePercentage, int finishRedPercentage, int finishGreenPercentage,
+            int finishBluePercentage, int msDuration, bool isInfinite);
 
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool LogiLedStopEffectsOnKey(keyboardNames keyName);
@@ -193,5 +230,4 @@ namespace LedCSharp
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
         public static extern void LogiLedShutdown();
     }
-
 }
