@@ -31,6 +31,7 @@ namespace teethris.NET.SDK
 
             //var timer = new Timer {Interval = 10};
             //timer.Tick += (sender, args) => gameManager.Tick();
+
             //timer.Start();
 
             Application.Run();

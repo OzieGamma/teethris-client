@@ -48,7 +48,20 @@ namespace teethris.NET
                 this.taken.Add(key);
                 var enemyResult = this.enemy.CanMove(this.taken);
                 var playerResult = this.player.CanMove(this.taken);
-                return GameStateHelpers.MatrixResolution(enemyResult, playerResult);
+                var combinedResult = GameStateHelpers.MatrixResolution(enemyResult, playerResult);
+                if (combinedResult == GameState.Continue)
+                {
+                    if ((this.enemy.Size - this.player.Size) > 8)
+                    {
+                        return GameState.Lost;
+                    }
+                    if ((this.player.Size - this.enemy.Size) > 8)
+                    {
+                        return GameState.Won;
+                    }
+                    return GameState.Continue;
+                }
+                return combinedResult;
             }
             return result;
         }
@@ -59,9 +72,22 @@ namespace teethris.NET
             if (result == GameState.Continue)
             {
                 this.taken.Add(key);
-                var enemyResult =  this.enemy.CanMove(this.taken);
+                var enemyResult = this.enemy.CanMove(this.taken);
                 var playerResult = this.player.CanMove(this.taken);
-                return GameStateHelpers.MatrixResolution(enemyResult, playerResult);
+                var combinedResult = GameStateHelpers.MatrixResolution(enemyResult, playerResult);
+                if (combinedResult == GameState.Continue)
+                {
+                    if ((this.enemy.Size - this.player.Size) > 8)
+                    {
+                        return GameState.Lost;
+                    }
+                    if ((this.player.Size - this.enemy.Size) > 8)
+                    {
+                        return GameState.Won;
+                    }
+                    return GameState.Continue;
+                }
+                return combinedResult;
             }
             return GameStateHelpers.Opposite(result);
         }

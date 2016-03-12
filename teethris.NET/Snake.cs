@@ -19,6 +19,7 @@ namespace teethris.NET
     public class Snake
     {
         private readonly PlayerColor color;
+        public int Size { get; set; }
 
         public Snake(KeyboardNames key, PlayerColor color)
         {
@@ -35,6 +36,7 @@ namespace teethris.NET
             SetLighting(this.Head, this.color, 30);
             this.Head = key;
             SetLighting(this.Head, this.color, 100);
+            this.Size += 1;
         }
 
         public GameState AddIfNeighbour(KeyboardNames key, ISet<KeyboardNames> taken)
