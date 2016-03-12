@@ -24,11 +24,15 @@ namespace teethris.NET.SDK
         public int Count => this.layout.Count;
         public ISet<KeyboardNames> this[KeyboardNames key] => new HashSet<KeyboardNames>(this.layout[key]);
 
+        private readonly ISet<KeyboardNames> illegalKeys;
+
+        public ISet<KeyboardNames> IllegalKeys => new HashSet<KeyboardNames>(this.illegalKeys);
+
+
         private KeyboardLayout()
         {
             this.layout = new Dictionary<KeyboardNames, ISet<KeyboardNames>>
             {
-                [KeyboardNames.ESC] = new HashSet<KeyboardNames>(new List<KeyboardNames>()),
                 [KeyboardNames.F1] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
                     KeyboardNames.ONE,
@@ -119,6 +123,11 @@ namespace teethris.NET.SDK
                     KeyboardNames.PRINT_SCREEN,
                     KeyboardNames.PAUSE_BREAK,
                     KeyboardNames.HOME
+                }),
+                [KeyboardNames.PAUSE_BREAK] = new HashSet<KeyboardNames>(new List<KeyboardNames>
+                {
+                    KeyboardNames.SCROLL_LOCK,
+                    KeyboardNames.PAGE_UP
                 }),
                 [KeyboardNames.TILDE] =
                     new HashSet<KeyboardNames>(new List<KeyboardNames> {KeyboardNames.ONE, KeyboardNames.TAB}),
@@ -226,10 +235,11 @@ namespace teethris.NET.SDK
                 }),
                 [KeyboardNames.BACKSPACE] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
+                    KeyboardNames.EQUALS,
                     KeyboardNames.F11,
                     KeyboardNames.F12,
-                    KeyboardNames.ENTER,
-                    KeyboardNames.CLOSE_BRACKET
+                    KeyboardNames.CLOSE_BRACKET,
+                    KeyboardNames.INSERT
                 }),
                 [KeyboardNames.INSERT] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
@@ -249,18 +259,10 @@ namespace teethris.NET.SDK
                 {
                     KeyboardNames.PAUSE_BREAK,
                     KeyboardNames.HOME,
-                    KeyboardNames.NUM_LOCK,
                     KeyboardNames.PAGE_DOWN
-                }),
-                [KeyboardNames.NUM_LOCK] = new HashSet<KeyboardNames>(new List<KeyboardNames>
-                {
-                    KeyboardNames.PAGE_UP,
-                    KeyboardNames.NUM_SLASH,
-                    KeyboardNames.NUM_SEVEN
                 }),
                 [KeyboardNames.NUM_SLASH] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
-                    KeyboardNames.NUM_LOCK,
                     KeyboardNames.NUM_ASTERISK,
                     KeyboardNames.NUM_EIGHT
                 }),
@@ -380,31 +382,21 @@ namespace teethris.NET.SDK
                     KeyboardNames.MINUS,
                     KeyboardNames.EQUALS,
                     KeyboardNames.SEMICOLON,
-                    KeyboardNames.APOSTROPHE
+                    KeyboardNames.APOSTROPHE,
+                    KeyboardNames.RIGHT_BACKSLASH
                 }),
                 [KeyboardNames.CLOSE_BRACKET] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
                     KeyboardNames.OPEN_BRACKET,
-                    KeyboardNames.ENTER,
                     KeyboardNames.EQUALS,
                     KeyboardNames.BACKSPACE,
                     KeyboardNames.APOSTROPHE,
                     KeyboardNames.RIGHT_BACKSLASH
                 }),
-                [KeyboardNames.ENTER] = new HashSet<KeyboardNames>(new List<KeyboardNames>
-                {
-                    KeyboardNames.BACKSPACE,
-                    KeyboardNames.CLOSE_BRACKET,
-                    KeyboardNames.RIGHT_BACKSLASH,
-                    KeyboardNames.RIGHT_SHIFT,
-                    KeyboardNames.KEYBOARD_DELETE,
-                    KeyboardNames.ARROW_UP
-                }),
                 [KeyboardNames.KEYBOARD_DELETE] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
-                    KeyboardNames.ENTER,
                     KeyboardNames.END,
-                    KeyboardNames.PAGE_DOWN,
+                    KeyboardNames.ARROW_LEFT,
                     KeyboardNames.INSERT,
                     KeyboardNames.ARROW_UP
                 }),
@@ -415,11 +407,18 @@ namespace teethris.NET.SDK
                     KeyboardNames.HOME,
                     KeyboardNames.ARROW_UP
                 }),
+                [KeyboardNames.PAGE_DOWN] = new HashSet<KeyboardNames>(new List<KeyboardNames>
+                {
+                    KeyboardNames.SEVEN,
+                    KeyboardNames.PAGE_UP,
+                    KeyboardNames.END,
+                    KeyboardNames.ARROW_UP,
+                    KeyboardNames.ARROW_RIGHT
+                }),
                 [KeyboardNames.NUM_SEVEN] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
                     KeyboardNames.PAGE_DOWN,
                     KeyboardNames.NUM_EIGHT,
-                    KeyboardNames.NUM_LOCK,
                     KeyboardNames.NUM_FOUR
                 }),
                 [KeyboardNames.NUM_EIGHT] = new HashSet<KeyboardNames>(new List<KeyboardNames>
@@ -547,16 +546,13 @@ namespace teethris.NET.SDK
                 {
                     KeyboardNames.APOSTROPHE,
                     KeyboardNames.CLOSE_BRACKET,
-                    KeyboardNames.ENTER,
                     KeyboardNames.RIGHT_SHIFT
                 }),
                 [KeyboardNames.NUM_FOUR] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
-                    KeyboardNames.PAGE_DOWN,
                     KeyboardNames.NUM_SEVEN,
                     KeyboardNames.NUM_FIVE,
-                    KeyboardNames.NUM_ONE,
-                    KeyboardNames.ARROW_UP
+                    KeyboardNames.NUM_ONE
                 }),
                 [KeyboardNames.NUM_FIVE] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
@@ -589,7 +585,9 @@ namespace teethris.NET.SDK
                     KeyboardNames.LEFT_SHIFT,
                     KeyboardNames.LEFT_CONTROL,
                     KeyboardNames.A,
-                    KeyboardNames.Z
+                    KeyboardNames.Z,
+                    KeyboardNames.CAPS_LOCK
+
                 }),
                 [KeyboardNames.Z] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
@@ -670,7 +668,8 @@ namespace teethris.NET.SDK
                     KeyboardNames.PERIOD,
                     KeyboardNames.SEMICOLON,
                     KeyboardNames.APOSTROPHE,
-                    KeyboardNames.RIGHT_SHIFT
+                    KeyboardNames.RIGHT_SHIFT,
+                    KeyboardNames.APPLICATION_SELECT
                 }),
                 [KeyboardNames.RIGHT_SHIFT] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
@@ -684,11 +683,9 @@ namespace teethris.NET.SDK
                 [KeyboardNames.ARROW_UP] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
                     KeyboardNames.RIGHT_SHIFT,
-                    KeyboardNames.ENTER,
                     KeyboardNames.KEYBOARD_DELETE,
                     KeyboardNames.END,
                     KeyboardNames.PAGE_DOWN,
-                    KeyboardNames.NUM_FOUR,
                     KeyboardNames.NUM_ONE,
                     KeyboardNames.ARROW_DOWN
                 }),
@@ -754,7 +751,6 @@ namespace teethris.NET.SDK
                 }),
                 [KeyboardNames.ARROW_LEFT] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
-                    KeyboardNames.APPLICATION_SELECT,
                     KeyboardNames.ARROW_DOWN,
                     KeyboardNames.RIGHT_CONTROL
                 }),
@@ -774,9 +770,29 @@ namespace teethris.NET.SDK
                 {
                     KeyboardNames.NUM_PERIOD,
                     KeyboardNames.NUM_ONE,
-                    KeyboardNames.NUM_TWO
+                    KeyboardNames.NUM_TWO,
+                    KeyboardNames.ARROW_RIGHT
+                }),
+                [KeyboardNames.NUM_PERIOD] = new HashSet<KeyboardNames>(new List<KeyboardNames>
+                {
+                    KeyboardNames.NUM_THREE,
+                    KeyboardNames.NUM_TWO,
+                    KeyboardNames.NUM_ZERO
                 })
+
             };
+
+            this.illegalKeys =
+                new HashSet<KeyboardNames>(new List<KeyboardNames>
+                {
+                    KeyboardNames.RIGHT_WINDOWS,
+                    KeyboardNames.LEFT_WINDOWS,
+                    KeyboardNames.NUM_LOCK,
+                    KeyboardNames.ENTER,
+                    KeyboardNames.NUM_ENTER,
+                    KeyboardNames.RIGHT_ALT,
+                    KeyboardNames.LEFT_ALT
+                });
         }
     }
 }

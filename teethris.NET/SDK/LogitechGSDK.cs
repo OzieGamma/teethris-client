@@ -10,7 +10,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-using teethris.NET;
+using teethris.NET.SDK;
 
 namespace LedCSharp
 {
@@ -31,7 +31,7 @@ namespace LedCSharp
         F12 = 0x58,
         PRINT_SCREEN = 0x137,
         SCROLL_LOCK = 0x46,
-        PAUSE_BREAK = 0x45,
+        PAUSE_BREAK = 0x145,
         TILDE = 0x29,
         ONE = 0x02,
         TWO = 0x03,
@@ -49,7 +49,7 @@ namespace LedCSharp
         INSERT = 0x152,
         HOME = 0x147,
         PAGE_UP = 0x149,
-        NUM_LOCK = 0x145,
+        NUM_LOCK = 0x45,
         NUM_SLASH = 0x135,
         NUM_ASTERISK = 0x37,
         NUM_MINUS = 0x4A,
@@ -204,6 +204,8 @@ namespace LedCSharp
                     return LogiLedSetLightingForKeyWithKeyName(keyCode, 0, 0, percentage);
                 case PlayerColor.Green:
                     return LogiLedSetLightingForKeyWithKeyName(keyCode, 0, percentage, 0);
+                case PlayerColor.Red:
+                    return LogiLedSetLightingForKeyWithKeyName(keyCode, percentage, 0, 0);
             }
 
             throw new InvalidOperationException("You shouldn't be here, not a valid player color !");

@@ -9,6 +9,7 @@
 // </copyright>
 
 using System;
+using System.Drawing;
 using LedCSharp;
 using teethris.NET.SDK;
 using static LedCSharp.LogitechGSDK;
@@ -33,7 +34,7 @@ namespace teethris.NET
         {
             if (!LogiLedInit())
             {
-                throw new LogitechIsBadException("Logitech engineers ...");
+                throw new LogitechException("Logitech engineers ...");
             }
             LogiLedSaveCurrentLighting();
             LogiLedSetLighting(0, 0, 0);
@@ -72,7 +73,11 @@ namespace teethris.NET
 
         public void StartAnimation()
         {
+            foreach (var key in KeyboardLayout.Instance.IllegalKeys)
+            {
+                SetLighting(key, PlayerColor.Red, 100);
 
+            }
         }
     }
 }

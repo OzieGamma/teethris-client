@@ -22,7 +22,8 @@
   "frameworks": {
     "dnx451": {
       "frameworkAssemblies": {
-        "System.Windows.Forms": "4.0.0.0"
+        "System.Windows.Forms": "4.0.0.0",
+        "System.Drawing": "4.0.0.0"
       }
     }
   }
