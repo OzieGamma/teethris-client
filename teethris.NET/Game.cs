@@ -19,8 +19,6 @@ namespace teethris.NET
     {
         public static void Main()
         {
-            Network.init();
-
             TeethrisSdk.Run<Game>();
         }
 
@@ -28,6 +26,8 @@ namespace teethris.NET
 
         public Game()
         {
+            Network.init(this);
+            
             if (!LogiLedInit())
             {
                 throw new LogitechIsBadException("Logitech engineers ...");
@@ -41,9 +41,15 @@ namespace teethris.NET
         {
             Console.WriteLine($"Key pressed {key}");
             Network.send(key.ToString());
+            this.KeyReceived(key.ToString());
             this.player.AddIfNeighbour(key);
         }
-
+        
+        public void KeyReceived(String key){
+            keyboardNames convertedKey = (keyboardNames) Enum.Parse(typeof(keyboardNames), key, true);
+            Console.WriteLine("Yolo");
+        }
+        
         public void Tick()
         {
             //Console.WriteLine("Console tick");
