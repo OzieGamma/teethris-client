@@ -1,6 +1,7 @@
 import teethris
 
-from random import randint 
+friend = Snake(teethris.S,0)
+enemy = Snake(teethris.ONE,1)
 
 keyboard = {teethris.ESC:(), teethris.F1:(teethris.ONE,teethris.TWO,teethris.F2),teethris.F2:(teethris.F1,teethris.F3,teethris.TWO,teethris.THREE),teethris.F3:(teethris.F2,teethris.F4,teethris.THREE,teethris.FOUR),teethris.F4:(teethris.F3,teethris.F5,teethris.FOUR,teethris.FIVE),teethris.F5:(teethris.F6,teethris.F4,teethris.SIX,teethris.SEVEN),teethris.F6:(teethris.F7,teethris.F5,teethris.SEVEN,teethris.EIGHT),teethris.F7:(teethris.F6,teethris.F8,teethris.EIGHT,teethris.NINE),teethris.F8:(teethris.F7,teethris.F9,teethris.NINE,teethris.ZERO),teethris.F9:(teethris.F10,teethris.F8,teethris.MINUS),teethris.F10:(teethris.F9,teethris.F11,teethris.EQUALS),teethris.F11:(teethris.F10,teethris.F12,teethris.BACKSPACE),teethris.F12:(teethris.F11,teethris.PRINT_SCREEN,teethris.BACKSPACE),teethris.PRINT_SCREEN:(teethris.F12,teethris.SCROLL_LOCK,teethris.INSERT),teethris.SCROLL_LOCK:(teethris.PRINT_SCREEN,teethris.PAUSE_BREAK,teethris.HOME),
             teethris.TILDE:(teethris.ONE,teethris.TAB),teethris.ONE:(teethris.F1,teethris.TILDE,teethris.TWO,teethris.Q,teethris.TAB),teethris.TWO:(teethris.F1,teethris.F2,teethris.ONE,teethris.THREE,teethris.Q,teethris.W),teethris.THREE:(teethris.F2,teethris.F3,teethris.TWO,teethris.FOUR,teethris.W,teethris.E),teethris.FOUR:(teethris.F3,teethris.F4,teethris.THREE,teethris.FIVE,teethris.E,teethris.R),teethris.FIVE:(teethris.F4,teethris.FOUR,teethris.SIX,teethris.R,teethris.T),teethris.SIX:(teethris.F5,teethris.FIVE,teethris.SEVEN,teethris.T,teethris.Y),teethris.SEVEN:(teethris.F5,teethris.F6,teethris.SIX,teethris.EIGHT,teethris.Y,teethris.U),teethris.EIGHT:(teethris.F6,teethris.F7,teethris.SEVEN,teethris.NINE,teethris.U,teethris.I),teethris.NINE:(teethris.F7,teethris.F8,teethris.EIGHT,teethris.ZERO,teethris.I,teethris.O),teethris.ZERO:(teethris.F8,teethris.NINE,teethris.MINUS,teethris.O,teethris.P),teethris.MINUS:(teethris.F9,teethris.ZERO,teethris.EQUALS,teethris.P,teethris.OPEN_BRACKET),teethris.EQUALS:(teethris.F10,teethris.MINUS,teethris.BACKSPACE,teethris.OPEN_BRACKET,teethris.CLOSE_BRACKET),teethris.BACKSPACE:(teethris.F11,teethris.F12,teethris.ENTER,teethris.CLOSE_BRACKET),teethris.INSERT:(teethris.PRINT_SCREEN,teethris.HOME,teethris.BACKSPACE,teethris.KEYBOARD_DELETE),teethris.HOME:(teethris.SCROLL_LOCK,teethris.INSERT,teethris.PAGE_UP,teethris.END),teethris.PAGE_UP:(teethris.PAUSE_BREAK,teethris.HOME,teethris.NUM_LOCK,teethris.PAGE_DOWN),teethris.NUM_LOCK:(teethris.PAGE_UP,teethris.NUM_SLASH,teethris.NUM_SEVEN),teethris.NUM_SLASH:(teethris.NUM_LOCK,teethris.NUM_ASTERISK,teethris.NUM_EIGHT),teethris.NUM_ASTERISK:(teethris.NUM_SLASH,teethris.NUM_MINUS,teethris.NUM_NINE),teethris.NUM_MINUS:(teethris.NUM_ASTERISK,teethris.NUM_PLUS),
@@ -14,22 +15,19 @@ def init():
     
     teethris.setLighting(teethris.LEFT_WINDOWS, 0, 0, 100)
     
-    friend = Snake(teethris.S,0)
-    print(friend.get_head())
-    #enemy = Snake(keyboard.keys(randint(0,100)))
-    
     print(teethris.A)
     
 def loop():
     return
     
 def on_key_press(key):
-    teethris.setLighting(key, 0, 100, 0)
-    print("BANG!!!")
-    keys = keyboard[key]
-    print("pong")
-    for val in keys:
-        teethris.setLighting(val, 0, 30, 0)
+
+    if friend.checkIfNeighbour(key):
+        friend.addKey(key)
+    #teethris.setLighting(key, 0, 100, 0)
+    #keys = keyboard[key]
+    #for val in keys:
+    #teethris.setLighting(val, 0, 30, 0)
 		
 
 class Snake:
@@ -52,8 +50,8 @@ class Snake:
     def checkIfNeighbour(self,key):
         if not key in self.keys:
             if not key in game.keyboard[self.get_head()]:
-                return true
-        return false
+                return True
+        return False
 
     def addKey(self,key):
         self.keys.append(key)
