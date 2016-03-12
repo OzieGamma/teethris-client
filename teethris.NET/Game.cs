@@ -11,6 +11,7 @@
 using System;
 using LedCSharp;
 using teethris.NET.SDK;
+using static LedCSharp.LogitechGSDK;
 
 namespace teethris.NET
 {
@@ -19,6 +20,12 @@ namespace teethris.NET
         public static void Main()
         {
             TeethrisSdk.Run<Game>();
+        }
+
+        public Game()
+        {
+            LogiLedInit();
+            LogiLedSaveCurrentLighting();
         }
 
         public void KeyPress(keyboardNames key)
@@ -33,6 +40,13 @@ namespace teethris.NET
 
         public void Dispose()
         {
+            LogiLedRestoreLighting();
+            LogiLedShutdown();
+        }
+
+        public void StartAnimation()
+        {
+            
         }
     }
 }
