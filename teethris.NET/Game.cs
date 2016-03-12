@@ -18,8 +18,25 @@ namespace teethris.NET
     {
         public static void Main()
         {
+<<<<<<< HEAD
             Network.init();
+=======
+<<<<<<< HEAD
+            var game = new Game();
+            TeethrisSdk.Run(game);
+            Snake friend = new Snake(keyboardNames.S);
+        }
+
+        public void Die()
+        {
+        }
+
+        public void Init()
+        {
+=======
+>>>>>>> 7ee123b3a75e986391c740359c868e26a754f971
             TeethrisSdk.Run<Game>();
+>>>>>>> origin/master
         }
 
         public void KeyPress(keyboardNames key)
@@ -35,6 +52,28 @@ namespace teethris.NET
 
         public void Dispose()
         {
+        }
+    }
+    
+    public class Snake{
+        
+        private List<int> keys = new List<int>();
+        private int friend = 0;
+        
+        public Snake(int key,int friend){
+            this.friend = friend;
+            this.keys.Add(key);
+            LogiLedSetLightingForKeyWithKeyName(key,0,100-friend*100,friend*100);
+        }
+        
+        public int getHead(){
+            return keys[keys.Count - 1];
+        }
+        
+        public addKey(int key){
+            LogiLedSetLightingForKeyWithKeyName(getHead(),0,30-friend*30,friend*30);
+            keys.Add(key);
+            LogiLedSetLightingForKeyWithKeyName(getHead(),0,100-friend*100,friend*100);
         }
     }
 }
