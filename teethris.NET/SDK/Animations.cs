@@ -44,70 +44,65 @@ namespace teethris.NET.SDK
 
         public static void Countdown()
         {
-            ISet<KeyboardNames> threeSeconds;
-            ISet<KeyboardNames> twoSeconds;
-            ISet<KeyboardNames> oneSecond;
-
-
-            threeSeconds =
-                new HashSet<KeyboardNames>(new List<KeyboardNames>
-                {
-                    KeyboardNames.NUM_LOCK,
-                    KeyboardNames.NUM_ENTER,
-                    KeyboardNames.NUM_SLASH,
-                    KeyboardNames.NUM_ASTERISK,
-                    KeyboardNames.NUM_MINUS,
-                    KeyboardNames.NUM_PLUS,
-                    KeyboardNames.NUM_PERIOD,
-                    KeyboardNames.NUM_ZERO,
-                    KeyboardNames.NUM_SIX,
-                    KeyboardNames.NUM_FIVE,
-                    KeyboardNames.NUM_FOUR
-                });
-
-            twoSeconds =
-                new HashSet<KeyboardNames>(new List<KeyboardNames>
-                {
-                    KeyboardNames.NUM_LOCK,
-                    KeyboardNames.NUM_ONE,
-                    KeyboardNames.NUM_SLASH,
-                    KeyboardNames.NUM_ASTERISK,
-                    KeyboardNames.NUM_MINUS,
-                    KeyboardNames.NUM_PLUS,
-                    KeyboardNames.NUM_PERIOD,
-                    KeyboardNames.NUM_ZERO,
-                    KeyboardNames.NUM_SIX,
-                    KeyboardNames.NUM_FIVE,
-                    KeyboardNames.NUM_FOUR
-                });
-
-            oneSecond =
-                new HashSet<KeyboardNames>(new List<KeyboardNames>
-                {
-                    KeyboardNames.NUM_ENTER,
-                    KeyboardNames.NUM_MINUS,
-                    KeyboardNames.NUM_PLUS,
-                });
-
-            foreach (var key in threeSeconds)
+            ISet<KeyboardNames> pattern = new HashSet<KeyboardNames>(new List<KeyboardNames>
             {
-                SetLighting(key, PlayerColor.Red, 100);
-            }
-            Thread.Sleep(1500);
-            LogiLedSetLighting(0, 0, 0);
-            foreach (var key in twoSeconds)
+                KeyboardNames.NUM_LOCK,
+                KeyboardNames.NUM_ENTER,
+                KeyboardNames.NUM_SLASH,
+                KeyboardNames.NUM_ASTERISK,
+                KeyboardNames.NUM_MINUS,
+                KeyboardNames.NUM_PLUS,
+                KeyboardNames.NUM_PERIOD,
+                KeyboardNames.NUM_ZERO,
+                KeyboardNames.NUM_SIX,
+                KeyboardNames.NUM_FIVE,
+                KeyboardNames.NUM_FOUR
+            });
+
+            foreach (var key in pattern)
             {
                 SetLighting(key, PlayerColor.Red, 100);
             }
             Thread.Sleep(1500);
             LogiLedSetLighting(0, 0, 0);
 
-            foreach (var key in oneSecond)
+            pattern = new HashSet<KeyboardNames>(new List<KeyboardNames>
+            {
+                KeyboardNames.NUM_LOCK,
+                KeyboardNames.NUM_ONE,
+                KeyboardNames.NUM_SLASH,
+                KeyboardNames.NUM_ASTERISK,
+                KeyboardNames.NUM_MINUS,
+                KeyboardNames.NUM_PLUS,
+                KeyboardNames.NUM_PERIOD,
+                KeyboardNames.NUM_ZERO,
+                KeyboardNames.NUM_SIX,
+                KeyboardNames.NUM_FIVE,
+                KeyboardNames.NUM_FOUR
+            });
+
+            foreach (var key in pattern)
             {
                 SetLighting(key, PlayerColor.Red, 100);
             }
             Thread.Sleep(1500);
             LogiLedSetLighting(0, 0, 0);
+
+            pattern = new HashSet<KeyboardNames>(new List<KeyboardNames>
+            {
+                KeyboardNames.NUM_ENTER,
+                KeyboardNames.NUM_MINUS,
+                KeyboardNames.NUM_PLUS,
+            });
+
+            
+            foreach (var key in pattern)
+            {
+                SetLighting(key, PlayerColor.Red, 100);
+            }
+            Thread.Sleep(1500);
+            LogiLedSetLighting(0, 0, 0);
+
 
         }
     }
