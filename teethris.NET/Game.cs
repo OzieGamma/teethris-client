@@ -28,8 +28,6 @@ namespace teethris.NET
 
         public Game()
         {
-            TeethrisSdk.Run<Game>();
-
             LogiLedInit();
             LogiLedSaveCurrentLighting();
             this.player = new Snake(keyboardNames.S);
