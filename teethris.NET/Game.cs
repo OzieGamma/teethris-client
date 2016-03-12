@@ -46,7 +46,7 @@ namespace teethris.NET
 
         public void Tick()
         {
-            Console.WriteLine("Console tick");
+            //Console.WriteLine("Console tick");
         }
 
         public void Dispose()
