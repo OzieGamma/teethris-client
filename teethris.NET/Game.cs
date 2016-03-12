@@ -10,6 +10,7 @@
 
 using System;
 using LedCSharp;
+using teethris.NET.SDK;
 
 namespace teethris.NET
 {
@@ -18,15 +19,7 @@ namespace teethris.NET
         public static void Main()
         {
             var game = new Game();
-            TeethrisSdk.Run(game);
-        }
-
-        public void Die()
-        {
-        }
-
-        public void Init()
-        {
+            TeethrisSdk.Run<Game>();
         }
 
         public void KeyPress(keyboardNames key)
@@ -37,6 +30,11 @@ namespace teethris.NET
         public void Tick()
         {
             Console.WriteLine("Console tick");
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }
