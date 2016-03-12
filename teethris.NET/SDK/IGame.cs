@@ -13,10 +13,20 @@ using LedCSharp;
 
 namespace teethris.NET.SDK
 {
-    public interface IGame : IDisposable
+    public interface IGame
     {
-        void KeyPress(KeyboardNames key);
-        void KeyReceived(KeyboardNames key);
-        void Tick();
+        /// <summary>
+        ///  Invoked when a key is pressed
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>True if end of the game</returns>
+        GameState KeyPress(KeyboardNames key);
+
+        /// <summary>
+        /// Invoked when a key is recieved from the network
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>True if end of the game</returns>
+        GameState KeyReceived(KeyboardNames key);
     }
 }

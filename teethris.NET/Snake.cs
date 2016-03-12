@@ -1,5 +1,5 @@
-// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zo� PETARD" file="Snake.cs">
-// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zo� PETARD
+// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="Snake.cs">
+// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 // 
@@ -18,35 +18,48 @@ namespace teethris.NET
 {
     public class Snake
     {
-        private readonly List<KeyboardNames> keys = new List<KeyboardNames>();
         private readonly PlayerColor color;
 
         public Snake(KeyboardNames key, PlayerColor color)
         {
             this.color = color;
-            this.keys.Add(key);
 
+            this.Head = key;
             SetLighting(key, color, 100);
         }
 
-        public KeyboardNames Head => this.keys.Last();
-        
-        public void Add(KeyboardNames key)
+        public KeyboardNames Head { get; set; }
+
+        public void ChangeHead(KeyboardNames key)
         {
             SetLighting(this.Head, this.color, 30);
-
-            this.keys.Add(key);
-
+            this.Head = key;
             SetLighting(this.Head, this.color, 100);
         }
 
-        public bool AddIfNeighbour(KeyboardNames key)
+        public GameState AddIfNeighbour(KeyboardNames key, ISet<KeyboardNames> taken)
         {
-            if (this.keys.Contains(key) || !KeyboardLayout.Instance[this.Head].Contains(key)) return false;
+            if (taken.Contains(key))
+            {
+                return GameState.Lost;
+            }
 
-            this.Add(key);
-            
-            return true;
+            if (!KeyboardLayout.Instance[this.Head].Contains(key))
+            {
+                return GameState.Lost;
+            }
+
+            this.ChangeHead(key);
+            return GameState.Continue;
+        }
+
+        public GameState CanMove(ISet<KeyboardNames> taken)
+        {
+            if (KeyboardLayout.Instance[this.Head].All(taken.Contains))
+            {
+                return GameState.Lost;
+            }
+            return GameState.Continue;
         }
     }
 }

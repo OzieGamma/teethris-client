@@ -29,9 +29,9 @@ namespace teethris.NET.SDK
 
             hookId = SetHook(HookCallback(gameManager.KeyPressed));
 
-            var timer = new Timer {Interval = 10};
-            timer.Tick += (sender, args) => gameManager.Tick();
-            timer.Start();
+            //var timer = new Timer {Interval = 10};
+            //timer.Tick += (sender, args) => gameManager.Tick();
+            //timer.Start();
 
             Application.Run();
             Console.WriteLine("asf");

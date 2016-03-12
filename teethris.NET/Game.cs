@@ -8,19 +8,14 @@
 // Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 // </copyright>
 
-using System;
-using System.Drawing;
+using System.Collections.Generic;
 using LedCSharp;
 using teethris.NET.SDK;
-using static LedCSharp.LogitechGSDK;
 
 namespace teethris.NET
 {
     public class Game : IGame
     {
-        private const string ChannelName = "chat message";
-        private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net");
-
         public static void Main()
         {
             Engine.Run<Game>();
@@ -28,56 +23,39 @@ namespace teethris.NET
 
         private readonly Snake player;
         private readonly Snake enemy;
-        private readonly MessageNetwork network;
+
+        private readonly ISet<KeyboardNames> taken = new HashSet<KeyboardNames>();
 
         public Game()
         {
-            if (!LogiLedInit())
-            {
-                throw new LogitechException("Logitech engineers ...");
-            }
-            LogiLedSaveCurrentLighting();
-            LogiLedSetLighting(0, 0, 0);
-            this.StartAnimation();
             this.player = new Snake(KeyboardNames.S, PlayerColor.Green);
             this.enemy = new Snake(KeyboardNames.NUM_SIX, PlayerColor.Blue);
-            this.network = new MessageNetwork(this.KeyReceived, Uri, ChannelName);
         }
 
-        public void KeyPress(KeyboardNames key)
+        public GameState KeyPress(KeyboardNames key)
         {
-            if (!this.player.AddIfNeighbour(key))
+            var result = this.player.AddIfNeighbour(key, this.taken);
+            if (result == GameState.Continue)
             {
-                
+                this.taken.Add(key);
+                var enemyResult = this.enemy.CanMove(this.taken);
+                var playerResult = this.enemy.CanMove(this.taken);
+                return GameStateHelpers.MatrixResolution(enemyResult, playerResult);
             }
-            Console.WriteLine($"Key pressed {key}");
-            this.network.SendKey(key);
-            this.player.AddIfNeighbour(key);
-        }
-        
-        public void KeyReceived(KeyboardNames key){
-            Console.WriteLine($"Key recieved: {key}");
-            this.enemy.Add(key);
-        }
-        
-        public void Tick()
-        {
-            //Console.WriteLine("Console tick");
+            return result;
         }
 
-        public void Dispose()
+        public GameState KeyReceived(KeyboardNames key)
         {
-            LogiLedRestoreLighting();
-            LogiLedShutdown();
-        }
-
-        public void StartAnimation()
-        {
-            foreach (var key in KeyboardLayout.Instance.IllegalKeys)
+            var result = this.enemy.AddIfNeighbour(key, this.taken);
+            if (result == GameState.Continue)
             {
-                SetLighting(key, PlayerColor.Red, 100);
-
+                this.taken.Add(key);
+                var enemyResult =  this.enemy.CanMove(this.taken);
+                var playerResult = this.enemy.CanMove(this.taken);
+                return GameStateHelpers.MatrixResolution(enemyResult, playerResult);
             }
+            return GameStateHelpers.Opposite(result);
         }
     }
 }

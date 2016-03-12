@@ -8,21 +8,25 @@
 // Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 // </copyright>
 
+using System;
 using LedCSharp;
+using static LedCSharp.LogitechGSDK;
 
 namespace teethris.NET.SDK
 {
     public class GameRunner<T> where T : class, IGame, new()
     {
+        private const string ChannelName = "chat message";
+        private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net");
+
         private T game;
+        private readonly MessageNetwork network;
+
         private bool active;
 
-        public void Tick()
+        public GameRunner()
         {
-            if (this.active)
-            {
-                this.game.Tick();
-            }
+            this.network = new MessageNetwork(this.KeyRecieved, Uri, ChannelName);
         }
 
         /// <summary>
@@ -37,25 +41,88 @@ namespace teethris.NET.SDK
         /// </returns>
         public bool KeyPressed(KeyboardNames key)
         {
+            Console.WriteLine($"Key pressed {key}");
+
+            //this.network.SendKey(key);
+
             if (this.active)
             {
                 if (key == KeyboardNames.ESC)
                 {
-                    this.game.Dispose();
-                    this.game = null;
-                    this.active = false;
-                    return true;
+                    this.EndGame();
                 }
-                this.game.KeyPress(key);
+                else
+                {
+                    this.AcknowledgeState(this.game.KeyPress(key));
+                }
                 return false;
             }
             if (key == KeyboardNames.ESC)
             {
-                this.game = new T();
-                this.active = true;
+                this.NewGame();
                 return false;
             }
             return true;
+        }
+
+        private void KeyRecieved(KeyboardNames key)
+        {
+            Console.WriteLine($"Key recieved {key}");
+
+            if (this.active)
+            {
+                if (key == KeyboardNames.ESC)
+                {
+                    this.AcknowledgeState(GameState.Won);
+                }
+                this.AcknowledgeState(this.game.KeyPress(key));
+            }
+        }
+
+        private void AcknowledgeState(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Won:
+                    Animations.Won();
+                    this.EndGame();
+                    break;
+                case GameState.Lost:
+                    Animations.Lost();
+                    this.EndGame();
+                    break;
+                case GameState.Continue:
+                    break;
+            }
+        }
+
+
+        private void NewGame()
+        {
+            Console.WriteLine("Begin of the game !");
+
+            if (!LogiLedInit())
+            {
+                throw new LogitechException("Logitech engineers ...");
+            }
+
+            LogiLedSaveCurrentLighting();
+            LogiLedSetLighting(0, 0, 0);
+
+            Animations.Start();
+
+            this.game = new T();
+            this.active = true;
+        }
+
+        private void EndGame()
+        {
+            Console.WriteLine("End of the game !");
+            this.game = null;
+            this.active = false;
+
+            LogiLedRestoreLighting();
+            LogiLedShutdown();
         }
     }
 }
