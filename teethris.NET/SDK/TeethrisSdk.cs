@@ -23,9 +23,9 @@ namespace teethris.NET.SDK
         private const int WmKeydown = 0x0100;
         private static IntPtr hookId = IntPtr.Zero;
 
-        public static void Run(Game game)
+        public static void Run<T>() where T : class, IGame, new()
         {
-            var gameManager = new GameManager(game);
+            var gameManager = new GameRunner<T>();
 
             hookId = SetHook(HookCallback(gameManager.KeyPressed));
 

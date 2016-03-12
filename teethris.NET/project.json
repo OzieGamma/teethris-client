@@ -7,6 +7,7 @@
   "licenseUrl": "https://github.com/OzieGamma/teethris-client/blob/master/LICENSE",
 
   "compilationOptions": {
+    "languageVersion": "csharp6",
     "emitEntryPoint": true
   },
 
