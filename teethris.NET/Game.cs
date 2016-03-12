@@ -18,7 +18,6 @@ namespace teethris.NET
     {
         public static void Main()
         {
-            var game = new Game();
             TeethrisSdk.Run<Game>();
         }
 
