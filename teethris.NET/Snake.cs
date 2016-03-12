@@ -1,5 +1,5 @@
-// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="Snake.cs">
-// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD
+// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoï¿½ PETARD" file="Snake.cs">
+// Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoï¿½ PETARD
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 // 
@@ -30,16 +30,22 @@ namespace teethris.NET
         }
 
         public KeyboardNames Head => this.keys.Last();
-
-        public bool AddIfNeighbour(KeyboardNames key)
+        
+        public void Add(KeyboardNames key)
         {
-            if (this.keys.Contains(key) || !KeyboardLayout.Instance[this.Head].Contains(key)) return false;
-
             SetLighting(this.Head, this.color, 30);
 
             this.keys.Add(key);
 
             SetLighting(this.Head, this.color, 100);
+        }
+
+        public bool AddIfNeighbour(KeyboardNames key)
+        {
+            if (this.keys.Contains(key) || !KeyboardLayout.Instance[this.Head].Contains(key)) return false;
+
+            this.Add(key);
+            
             return true;
         }
     }

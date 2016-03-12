@@ -51,12 +51,12 @@ namespace teethris.NET
             }
             Console.WriteLine($"Key pressed {key}");
             this.network.SendKey(key);
-            this.KeyReceived(key);
             this.player.AddIfNeighbour(key);
         }
         
         public void KeyReceived(KeyboardNames key){
             Console.WriteLine($"Key recieved: {key}");
+            this.enemy.Add(key);
         }
         
         public void Tick()
