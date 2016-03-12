@@ -17,8 +17,8 @@ namespace teethris.NET.SDK
 {
     public class GameRunner<T> where T : class, IGame, new()
     {
-        private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net");
-            //new Uri("http://localhost:3000/");//
+        private static readonly Uri Uri = //new Uri("http://borisjeltsin.azurewebsites.net");
+            new Uri("http://localhost:3000/");//
 
         private T game;
         private MessageNetwork network;
@@ -118,6 +118,13 @@ namespace teethris.NET.SDK
             while (this.network.Id == -1)
             {
                 Console.WriteLine("Waiting for ID");
+                Thread.Sleep(2);
+            }
+            
+            // Wait for the countdown
+            while (!this.network.Ready)
+            {
+                Console.WriteLine("Waiting for ready signal");
                 Thread.Sleep(2);
             }
 
