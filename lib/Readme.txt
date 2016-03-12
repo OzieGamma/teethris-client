@@ -1,0 +1,1 @@
+Run python setup.py in de socketIO map om de lib te installeren. Dan run protput.py voor de test.
