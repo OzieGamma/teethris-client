@@ -4,6 +4,7 @@
 #include "KeyCodeUniformizer.h"
 #include "PythonBinding.h"
 
+int active = 0;
 
 LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -16,8 +17,15 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 		case WM_KEYDOWN:
 		case WM_SYSKEYDOWN:
+			if(key == LogiLed::KeyName::ESC)
+			{
+				active = !active;
+			}
+
 			printf("Hello vk:%d scan: %d\n", p->vkCode, p->scanCode);
-			PythonBinding_KeyPress(key);
+			if (active) {
+				PythonBinding_KeyPress(key);
+			}
 			break;
 		}
 	}
@@ -29,9 +37,7 @@ VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 	PythonBinding_Loop();
 }
 
-
-
-int main(int argc, char* argv[])
+void run()
 {
 	LogiLedInit();
 	LogiLedSaveCurrentLighting();
@@ -41,19 +47,17 @@ int main(int argc, char* argv[])
 	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::LEFT_WINDOWS, 100, 0, 0);
 	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::RIGHT_WINDOWS, 100, 0, 0);
 
-	
+
 
 	PythonBinding_Init();
 
-	// Install the low-level keyboard & mouse hooks
-	auto hhkLowLevelKybd = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, nullptr, 0);
 
 	HANDLE hTimer = nullptr;
 	HANDLE hTimerQueue = CreateTimerQueue();
 	if (NULL == hTimerQueue)
 	{
 		printf("CreateTimerQueue failed (%d)\n", GetLastError());
-		return 2;
+		exit(-1);
 	}
 
 	// Set a timer to call the timer routine in 10 seconds.
@@ -61,10 +65,8 @@ int main(int argc, char* argv[])
 		static_cast<WAITORTIMERCALLBACK>(TimerRoutine), NULL, 10, 10, 0))
 	{
 		printf("CreateTimerQueueTimer failed (%d)\n", GetLastError());
-		return 3;
+		exit(-1);
 	}
-
-
 
 	// Keep this app running until we're told to stop
 	MSG msg;
@@ -78,12 +80,24 @@ int main(int argc, char* argv[])
 	if (!DeleteTimerQueue(hTimerQueue))
 		printf("DeleteTimerQueue failed (%d)\n", GetLastError());
 
-	UnhookWindowsHookEx(hhkLowLevelKybd);
-
 	PythonBinding_Close();
 
 	LogiLedRestoreLighting();
 	LogiLedShutdown();
+}
+
+int main(int argc, char* argv[])
+{
+
+	// Install the low-level keyboard & mouse hooks
+	auto hhkLowLevelKybd = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, nullptr, 0);
+
+	while(true)
+	{
+		
+	}
+
+	UnhookWindowsHookEx(hhkLowLevelKybd);
 
 	return 0;
 }
