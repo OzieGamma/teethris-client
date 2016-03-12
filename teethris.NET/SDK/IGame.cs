@@ -16,6 +16,7 @@ namespace teethris.NET.SDK
     public interface IGame : IDisposable
     {
         void KeyPress(keyboardNames key);
+        void KeyReceived(String key);
         void Tick();
     }
 }
