@@ -59,6 +59,7 @@ LogiLed::KeyName KeyForVkCode(int vkCode)
 	case 88: return LogiLed::KeyName::X;
 	case 89: return LogiLed::KeyName::Y;
 	case 90: return LogiLed::KeyName::Z;
+	case 93: return LogiLed::KeyName::APPLICATION_SELECT;
 	case 96: return LogiLed::KeyName::NUM_ZERO;
 	case 97: return LogiLed::KeyName::NUM_ONE;
 	case 98: return LogiLed::KeyName::NUM_TWO;

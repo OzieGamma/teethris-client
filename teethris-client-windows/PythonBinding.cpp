@@ -23,7 +23,11 @@ static PyObject* teethris_setLighting(PyObject* self, PyObject* args)
 		return nullptr;
 	}
 
+	std::cerr << "TRACE" << std::endl;
+
 	LogiLedSetLightingForKeyWithKeyName(static_cast<LogiLed::KeyName>(key), red, green, blue);
+	
+	std::cerr << "TRACE end" << std::endl;
 
 	return PyLong_FromLong(0);
 }
@@ -269,6 +273,13 @@ void PythonBinding_KeyPress(LogiLed::KeyName key)
 	for (int i = 0; i < 2000; i += 1) {
 		LogiLedSetLightingForKeyWithScanCode(i, 0, 0, 0);
 	}
+
+	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::NUM_LOCK, 100, 0, 0);
+	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::NUM_ENTER, 100, 0, 0);
+	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::LEFT_WINDOWS, 100, 0, 0);
+	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::RIGHT_WINDOWS, 100, 0, 0);
+
+	std::cerr << "DEBUG" << std::endl;
 
 	InvoqueOneIntArg("on_key_press", key);
 }

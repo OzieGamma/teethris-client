@@ -24,6 +24,13 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
+VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
+{
+	PythonBinding_Loop();
+}
+
+
+
 int main(int argc, char* argv[])
 {
 	LogiLedInit();
@@ -33,7 +40,6 @@ int main(int argc, char* argv[])
 	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::NUM_ENTER, 100, 0, 0);
 	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::LEFT_WINDOWS, 100, 0, 0);
 	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::RIGHT_WINDOWS, 100, 0, 0);
-	LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName::APPLICATION_SELECT, 100, 0, 0);
 
 	
 
@@ -42,18 +48,35 @@ int main(int argc, char* argv[])
 	// Install the low-level keyboard & mouse hooks
 	auto hhkLowLevelKybd = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, nullptr, 0);
 
+	HANDLE hTimer = nullptr;
+	HANDLE hTimerQueue = CreateTimerQueue();
+	if (NULL == hTimerQueue)
+	{
+		printf("CreateTimerQueue failed (%d)\n", GetLastError());
+		return 2;
+	}
+
+	// Set a timer to call the timer routine in 10 seconds.
+	if (!CreateTimerQueueTimer(&hTimer, hTimerQueue,
+		static_cast<WAITORTIMERCALLBACK>(TimerRoutine), NULL, 10, 10, 0))
+	{
+		printf("CreateTimerQueueTimer failed (%d)\n", GetLastError());
+		return 3;
+	}
+
+
+
 	// Keep this app running until we're told to stop
 	MSG msg;
-	while (true)
-	{ 
-		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-		PythonBinding_Loop();
-		Sleep(1);
+	while (GetMessage(&msg, nullptr, 0, 0) > 0)
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
+
+
+	if (!DeleteTimerQueue(hTimerQueue))
+		printf("DeleteTimerQueue failed (%d)\n", GetLastError());
 
 	UnhookWindowsHookEx(hhkLowLevelKybd);
 
