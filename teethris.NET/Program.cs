@@ -25,25 +25,37 @@ namespace teethris.NET
         public static void Main()
         {
             hookId = SetHook(Proc);
+
+            var timer = new Timer();
+            timer.Interval = 10;
+            timer.Tick += TimerOnTick;
+            timer.Start();
+
             Application.Run();
+            Console.WriteLine("asf");
             UnhookWindowsHookEx(hookId);
+        }
+
+        private static void TimerOnTick(object sender, EventArgs eventArgs)
+        {
+            Console.WriteLine("sdag");
         }
 
         private static IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using (var curProcess = Process.GetCurrentProcess())
-            using (var curModule = curProcess.MainModule)
             {
-                return SetWindowsHookEx(WhKeyboardLl, proc,
-                    GetModuleHandle(curModule.ModuleName), 0);
+                using (var curModule = curProcess.MainModule)
+                {
+                    return SetWindowsHookEx(WhKeyboardLl, proc,
+                        GetModuleHandle(curModule.ModuleName), 0);
+                }
             }
         }
 
-        private delegate IntPtr LowLevelKeyboardProc(
-            int nCode, IntPtr wParam, IntPtr lParam);
+        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        private static IntPtr HookCallback(
-            int nCode, IntPtr wParam, IntPtr lParam)
+        private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if ((nCode >= 0) && (wParam == (IntPtr) WmKeydown))
             {
