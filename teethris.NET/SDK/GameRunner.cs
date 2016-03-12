@@ -9,6 +9,7 @@
 // </copyright>
 
 using System;
+using System.Threading;
 using LedCSharp;
 using static LedCSharp.LogitechGSDK;
 
@@ -16,8 +17,7 @@ namespace teethris.NET.SDK
 {
     public class GameRunner<T> where T : class, IGame, new()
     {
-        private const string ChannelName = "chat message";
-        private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net");
+        private static readonly Uri Uri = new Uri("http://localhost:3000/");//new Uri("http://borisjeltsin.azurewebsites.net");
 
         private T game;
         private readonly MessageNetwork network;
@@ -26,7 +26,14 @@ namespace teethris.NET.SDK
 
         public GameRunner()
         {
-            this.network = new MessageNetwork(this.KeyRecieved, Uri, ChannelName);
+            this.network = new MessageNetwork(this.KeyRecieved, Uri);
+
+            // Wait to be assigned an id
+            while (this.network.Id == -1)
+            {
+                Console.WriteLine("Waiting for ID");
+                Thread.Sleep(2);
+            }
         }
 
         /// <summary>
@@ -43,7 +50,7 @@ namespace teethris.NET.SDK
         {
             Console.WriteLine($"Key pressed {key}");
 
-            //this.network.SendKey(key);
+             this.network.SendKey(key);
 
             if (this.active)
             {
@@ -112,6 +119,7 @@ namespace teethris.NET.SDK
             Animations.Start();
 
             this.game = new T();
+            this.game.Init(this.network.Id);
             this.active = true;
         }
 

@@ -16,22 +16,24 @@ namespace teethris.NET.SDK
 {
     public class MessageNetwork
     {
-        private readonly string channelName;
+        private const string MsgChannel = "msg";
+        private const string IdChannel = "id";
         private readonly Socket socket;
 
-        public MessageNetwork(Action<KeyboardNames> keyRecieved, Uri uri, string channelName)
+        public long Id { get; set; }
+
+        public MessageNetwork(Action<KeyboardNames> keyRecieved, Uri uri)
         {
-            this.channelName = channelName;
+            this.Id = -1;
+
             this.socket = IO.Socket(uri);
 
-            this.socket.On(Socket.EVENT_CONNECT, () =>
-            {
-                /* this.socket.Emit(ChannelName, "hi"); */
-            });
+            this.socket.On(Socket.EVENT_CONNECT, () => { });
 
-            this.socket.On(channelName, data =>
+            this.socket.On(MsgChannel, data =>
             {
                 KeyboardNames key;
+                Console.WriteLine($"Got msg {(string)data}");
                 var success = Enum.TryParse((string) data, out key);
                 if (!success)
                 {
@@ -41,11 +43,15 @@ namespace teethris.NET.SDK
                     keyRecieved(key);
                 }
             });
+
+            this.socket.On(IdChannel, data => { this.Id = (long) data;
+                Console.WriteLine($"Got id {(long)data}");
+            });
         }
 
         public void SendKey(KeyboardNames key)
         {
-            this.socket.Emit(this.channelName, key.ToString());
+            this.socket.Emit(MsgChannel, key.ToString());
         }
     }
 }

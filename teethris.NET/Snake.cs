@@ -39,6 +39,10 @@ namespace teethris.NET
 
         public GameState AddIfNeighbour(KeyboardNames key, ISet<KeyboardNames> taken)
         {
+            if (KeyboardLayout.Instance.IllegalKeys.Contains(key))
+            {
+                return GameState.Lost;
+            }
             if (taken.Contains(key))
             {
                 return GameState.Lost;
@@ -55,7 +59,7 @@ namespace teethris.NET
 
         public GameState CanMove(ISet<KeyboardNames> taken)
         {
-            if (KeyboardLayout.Instance[this.Head].All(taken.Contains))
+            if (KeyboardLayout.Instance[this.Head].Except(KeyboardLayout.Instance.IllegalKeys).All(taken.Contains))
             {
                 return GameState.Lost;
             }

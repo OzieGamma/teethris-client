@@ -409,7 +409,7 @@ namespace teethris.NET.SDK
                 }),
                 [KeyboardNames.PAGE_DOWN] = new HashSet<KeyboardNames>(new List<KeyboardNames>
                 {
-                    KeyboardNames.SEVEN,
+                    KeyboardNames.NUM_SEVEN,
                     KeyboardNames.PAGE_UP,
                     KeyboardNames.END,
                     KeyboardNames.ARROW_UP,

@@ -21,15 +21,23 @@ namespace teethris.NET
             Engine.Run<Game>();
         }
 
-        private readonly Snake player;
-        private readonly Snake enemy;
+        private Snake player;
+        private Snake enemy;
 
         private readonly ISet<KeyboardNames> taken = new HashSet<KeyboardNames>();
 
-        public Game()
+        public void Init(long clientNumber)
         {
-            this.player = new Snake(KeyboardNames.S, PlayerColor.Green);
-            this.enemy = new Snake(KeyboardNames.NUM_SIX, PlayerColor.Blue);
+            if ((clientNumber%2) == 0)
+            {
+                this.player = new Snake(KeyboardNames.END, PlayerColor.Green);
+                this.enemy = new Snake(KeyboardNames.NUM_SIX, PlayerColor.Blue);
+            }
+            else
+            {
+                this.player = new Snake(KeyboardNames.NUM_SIX, PlayerColor.Green);
+                this.enemy = new Snake(KeyboardNames.END, PlayerColor.Blue);
+            }
         }
 
         public GameState KeyPress(KeyboardNames key)
@@ -39,7 +47,7 @@ namespace teethris.NET
             {
                 this.taken.Add(key);
                 var enemyResult = this.enemy.CanMove(this.taken);
-                var playerResult = this.enemy.CanMove(this.taken);
+                var playerResult = this.player.CanMove(this.taken);
                 return GameStateHelpers.MatrixResolution(enemyResult, playerResult);
             }
             return result;
@@ -52,7 +60,7 @@ namespace teethris.NET
             {
                 this.taken.Add(key);
                 var enemyResult =  this.enemy.CanMove(this.taken);
-                var playerResult = this.enemy.CanMove(this.taken);
+                var playerResult = this.player.CanMove(this.taken);
                 return GameStateHelpers.MatrixResolution(enemyResult, playerResult);
             }
             return GameStateHelpers.Opposite(result);

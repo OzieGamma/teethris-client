@@ -9,6 +9,7 @@
 // </copyright>
 
 using System;
+using System.Security.Cryptography.X509Certificates;
 using LedCSharp;
 
 namespace teethris.NET.SDK
@@ -28,5 +29,7 @@ namespace teethris.NET.SDK
         /// <param name="key">The key</param>
         /// <returns>True if end of the game</returns>
         GameState KeyReceived(KeyboardNames key);
+
+        void Init(long clientNumber);
     }
 }

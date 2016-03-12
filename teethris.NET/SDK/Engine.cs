@@ -274,11 +274,11 @@ namespace teethris.NET.SDK
                 case 221:
                     return KeyboardNames.CLOSE_BRACKET;
                 case 220:
-                    return KeyboardNames.LEFT_BACKSLASH; /* Looks broken: KeyboardNames.BACKSLASH */
+                    return KeyboardNames.RIGHT_BACKSLASH;//LEFT_BACKSLASH; /* Looks broken: KeyboardNames.BACKSLASH */
                 case 222:
                     return KeyboardNames.APOSTROPHE;
                 case 226:
-                    return KeyboardNames.RIGHT_BACKSLASH; /* Looks broken: KeyboardNames.BACKSLASH */
+                    return KeyboardNames.LEFT_BACKSLASH; //RIGHT_BACKSLASH; /* Looks broken: KeyboardNames.BACKSLASH */
             }
 
             throw new InvalidEnumArgumentException("Should not be here vkCode: " + vkCode);
