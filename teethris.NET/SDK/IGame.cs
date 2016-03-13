@@ -14,6 +14,10 @@ namespace teethris.NET.SDK
 {
     public interface IGame
     {
+        GameType GameType { get; }
+
+        void Init(long clientNumber);
+
         /// <summary>
         ///     Invoked when a key is pressed
         /// </summary>
@@ -27,9 +31,5 @@ namespace teethris.NET.SDK
         /// <param name="key">The key</param>
         /// <returns>True if end of the game</returns>
         GameState KeyReceived(KeyboardNames key);
-
-        void Init(long clientNumber);
-
-        GameType GameType { get; }
     }
 }

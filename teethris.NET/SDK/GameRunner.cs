@@ -19,7 +19,7 @@ namespace teethris.NET.SDK
     public class GameRunner<T> where T : class, IGame, new()
     {
         private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net");
-            //new Uri("http://localhost:3000/");//
+        //new Uri("http://localhost:3000/");//
 
         private T game;
         private MessageNetwork network;
@@ -43,7 +43,11 @@ namespace teethris.NET.SDK
 
             if (this.active)
             {
-                this.network.SendKey(key);
+                if (this.MultiPlayer)
+                {
+                    this.network.SendKey(key);
+                }
+
                 if (key == KeyboardNames.ESC)
                 {
                     this.EndGame();
@@ -76,13 +80,16 @@ namespace teethris.NET.SDK
 
             if (this.active)
             {
-                if (key == KeyboardNames.ESC)
+                if (this.MultiPlayer)
                 {
-                    this.AcknowledgeState(GameState.Won);
-                }
-                else
-                {
-                    this.AcknowledgeState(this.game.KeyReceived(key));
+                    if (key == KeyboardNames.ESC)
+                    {
+                        this.AcknowledgeState(GameState.Won);
+                    }
+                    else
+                    {
+                        this.AcknowledgeState(this.game.KeyReceived(key));
+                    }
                 }
             }
         }
@@ -115,7 +122,7 @@ namespace teethris.NET.SDK
                 throw new LogitechException("Logitech engineers ...");
             }
 
-            
+
             LogiLedSaveCurrentLighting();
             LogiLedSetLighting(0, 0, 0);
             Console.WriteLine("Waiting for keyboard...");
@@ -123,54 +130,69 @@ namespace teethris.NET.SDK
 
             this.game = new T();
 
-            this.network = new MessageNetwork(this.KeyRecieved, Uri);
-
             new Task(WaitForStart).Start();
         }
         
         private void WaitForStart(){
             Console.WriteLine("Waiting for start");
             
-            // Wait to be assigned an id
-            while (this.network.Id == -1)
+            if (this.MultiPlayer)
             {
-                if(this.initing == true){
-                    Console.WriteLine("Waiting for ID");
-                } else {
-                    return;
-                }
-                Thread.Sleep(2);
-            }
-            
-            // Wait for the countdown
-            while (!this.network.Ready)
-            {
-                if(this.initing == true){
-                    Console.WriteLine("Waiting for ready signal");
-                } else {
-                    this.network.UnReady();
-                    Console.WriteLine("Stopping waiting for ready...");
-                    return;
-                }
-                Thread.Sleep(200);
+                this.network = new MessageNetwork(this.KeyRecieved, Uri);
+
+                // Wait to be assigned an id
+				while (this.network.Id == -1)
+				{
+					if(this.initing == true){
+						Console.WriteLine("Waiting for ID");
+					} else {
+						return;
+					}
+					Thread.Sleep(2);
+				}
+				
+				// Wait for the countdown
+				while (!this.network.Ready)
+				{
+					if(this.initing == true){
+						Console.WriteLine("Waiting for ready signal");
+					} else {
+						this.network.UnReady();
+						Console.WriteLine("Stopping waiting for ready...");
+						return;
+					}
+					Thread.Sleep(200);
+				}
             }
             
             Animations.Start();
 
-            this.game.Init(this.network.Id);
+            this.game.Init(this.MultiPlayer ? this.network.Id : 0);
             this.initing = false;
+
             this.active = true;
         }
 
         private void EndGame()
         {
             Console.WriteLine("End of the game !");
-            this.game = null;
-            this.network.Dispose();
+
+            if (this.MultiPlayer)
+            {
+                this.game = null;
+                this.network.Dispose();
+                this.network = null;
+            }
+            else
+            {
+                this.game = null;
+            }
             this.active = false;
 
             LogiLedRestoreLighting();
             LogiLedShutdown();
         }
+
+        private bool MultiPlayer => this.game.GameType == GameType.MultiPlayer;
     }
 }

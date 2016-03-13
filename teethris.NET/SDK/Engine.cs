@@ -280,9 +280,9 @@ namespace teethris.NET.SDK
                     return KeyboardNames.APOSTROPHE;
                 case 226:
                     return KeyboardNames.LEFT_BACKSLASH; //RIGHT_BACKSLASH; /* Looks broken: KeyboardNames.BACKSLASH */
+                default:
+                    return KeyboardNames.LEFT_WINDOWS;
             }
-
-            throw new InvalidEnumArgumentException("Should not be here vkCode: " + vkCode);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
