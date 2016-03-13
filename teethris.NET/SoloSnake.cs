@@ -24,11 +24,11 @@ namespace teethris.NET
         public Snake(List<KeyboardNames> startKeys, PlayerColor color)
         {
             this.color = color;
-            this.CurrentSnake = startKeys;
+            this.currentSnake = startKeys;
             SetLighting(key, color, 100);
         }
         
-        public List<KeyboardNames> CurrentSnake { get; set; }
+        private List<KeyboardNames> currentSnake;
         
         public GameState Move(KeyboardNames key,  KeyboardNames food)
         {
@@ -44,8 +44,9 @@ namespace teethris.NET
                 return GameState.Won;
             }
             
-            if (key != food) { //where is keys... how to compare
+            if (key != food) {
                 SetLighting(this.CurrentSnake.First(), color, 0);
+                ClearLighting(this.CurrentSnake.First());
                 this.CurrentSnake.RemoveAt(0);
             }
             else {
