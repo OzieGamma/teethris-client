@@ -38,7 +38,7 @@ namespace teethris.NET.BoardColorer
             result = this.enemy.Remove(key);
             if (result != GameState.Continue)
             {
-                return result;
+                return GameStateHelpers.Opposite(result);
             }
 
             return GameState.Continue;
@@ -55,7 +55,7 @@ namespace teethris.NET.BoardColorer
             result = this.player.Remove(key);
             if (result != GameState.Continue)
             {
-                return GameStateHelpers.Opposite(result);
+                return result;
             }
 
             return GameState.Continue;
