@@ -1,6 +1,7 @@
 ﻿using System;
 using teethris.NET.MulitPlayerSnakeGame;
 using teethris.NET.SDK;
+using teethris.NET.SoloSnake;
 
 namespace teethris.NET
 {
@@ -22,7 +23,7 @@ namespace teethris.NET
                         done = true;
                         break;
                     case "2":
-                        Engine.Run<MultiPlayerSnakeGame>();
+                        Engine.Run<SoloSnakeGame>();
                         done = true;
                         break;
                 }   

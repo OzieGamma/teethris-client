@@ -35,6 +35,8 @@ namespace teethris.NET.MulitPlayerSnakeGame
             }
         }
 
+        public GameType GameType => GameType.MultiPlayer;
+
         public GameState KeyPress(KeyboardNames key)
         {
             var result = this.player.AddIfNeighbour(key, this.taken);
