@@ -10,11 +10,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using LedCSharp;
 using teethris.NET.SDK;
-using LedCSharp;
 using static LedCSharp.LogitechGSDK;
 
 namespace teethris.NET.SoloSnake

@@ -1,4 +1,5 @@
 ﻿using System;
+using teethris.NET.BoardColorer;
 using teethris.NET.MulitPlayerSnakeGame;
 using teethris.NET.SDK;
 using teethris.NET.SoloSnake;
@@ -10,8 +11,9 @@ namespace teethris.NET
         public static void Main()
         {
             Console.WriteLine("What game would you like to play ?");
-            Console.WriteLine("1. Multi Player Snake Game");
-            Console.WriteLine("2. Single Player Snake Game");
+            Console.WriteLine("1. Multi Player Snake");
+            Console.WriteLine("2. Single Player Snake");
+            Console.WriteLine("3. Multi Player Board Battle");
 
             var done = false;
             while (!done)
@@ -24,6 +26,10 @@ namespace teethris.NET
                         break;
                     case "2":
                         Engine.Run<SoloSnakeGame>();
+                        done = true;
+                        break;
+                    case "3":
+                        Engine.Run<BoardColorerGame>();
                         done = true;
                         break;
                 }   
