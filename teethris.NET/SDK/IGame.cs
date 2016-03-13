@@ -8,8 +8,6 @@
 // Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 // </copyright>
 
-using System;
-using System.Security.Cryptography.X509Certificates;
 using LedCSharp;
 
 namespace teethris.NET.SDK
@@ -17,19 +15,21 @@ namespace teethris.NET.SDK
     public interface IGame
     {
         /// <summary>
-        ///  Invoked when a key is pressed
+        ///     Invoked when a key is pressed
         /// </summary>
         /// <param name="key">The key</param>
         /// <returns>True if end of the game</returns>
         GameState KeyPress(KeyboardNames key);
 
         /// <summary>
-        /// Invoked when a key is recieved from the network
+        ///     Invoked when a key is recieved from the network
         /// </summary>
         /// <param name="key">The key</param>
         /// <returns>True if end of the game</returns>
         GameState KeyReceived(KeyboardNames key);
 
         void Init(long clientNumber);
+
+        GameType GameType { get; }
     }
 }

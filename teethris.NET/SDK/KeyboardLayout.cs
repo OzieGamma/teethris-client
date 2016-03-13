@@ -19,7 +19,7 @@ namespace teethris.NET.SDK
 
         public static KeyboardLayout Instance => instance ?? (instance = new KeyboardLayout());
 
-        private readonly IDictionary<KeyboardNames, ISet<KeyboardNames>> layout;
+        public readonly IDictionary<KeyboardNames, ISet<KeyboardNames>> layout;
 
         public int Count => this.layout.Count;
         public ISet<KeyboardNames> this[KeyboardNames key] => new HashSet<KeyboardNames>(this.layout[key]);

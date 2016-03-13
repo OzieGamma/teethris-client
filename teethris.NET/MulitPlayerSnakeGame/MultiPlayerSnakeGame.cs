@@ -12,15 +12,10 @@ using System.Collections.Generic;
 using LedCSharp;
 using teethris.NET.SDK;
 
-namespace teethris.NET
+namespace teethris.NET.MulitPlayerSnakeGame
 {
     public class MultiPlayerSnakeGame : IGame
     {
-        public static void Main()
-        {
-            Engine.Run<MultiPlayerSnakeGame>();
-        }
-
         private Snake player;
         private Snake enemy;
 
@@ -39,6 +34,8 @@ namespace teethris.NET
                 this.enemy = new Snake(KeyboardNames.S, PlayerColor.Blue);
             }
         }
+
+        public GameType GameType => GameType.MultiPlayer;
 
         public GameState KeyPress(KeyboardNames key)
         {

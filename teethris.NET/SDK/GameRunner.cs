@@ -100,6 +100,7 @@ namespace teethris.NET.SDK
         {
             Console.WriteLine("Begin of the game !");
 
+
             if (!LogiLedInit())
             {
                 throw new LogitechException("Logitech engineers ...");

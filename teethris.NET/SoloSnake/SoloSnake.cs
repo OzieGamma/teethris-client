@@ -10,62 +10,59 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using LedCSharp;
 using teethris.NET.SDK;
+using LedCSharp;
 using static LedCSharp.LogitechGSDK;
 
-namespace teethris.NET
+namespace teethris.NET.SoloSnake
 {
-    public class Snake
+    public class SoloSnake
     {
         private readonly PlayerColor color;
-        public int Size { get; set; }
 
-        public Snake(KeyboardNames key, PlayerColor color)
+        public int Size => this.CurrentSnake.Count;
+
+        public SoloSnake(List<KeyboardNames> startKeys, PlayerColor color)
         {
             this.color = color;
-
-            this.Head = key;
-            SetLighting(key, color, 100);
+            this.CurrentSnake = startKeys;
+            foreach (var key in this.CurrentSnake)
+            {
+                SetLighting(key, color, 50);
+            }
+            SetLighting(this.Head, color, 100);
         }
+        
+        public  List<KeyboardNames> CurrentSnake { get; }
 
-        public KeyboardNames Head { get; set; }
+        public KeyboardNames Head => this.CurrentSnake.Last();
 
-        public void ChangeHead(KeyboardNames key)
-        {
-            SetLighting(this.Head, this.color, 50);
-            this.Head = key;
-            SetLighting(this.Head, this.color, 100);
-            this.Size += 1;
-        }
-
-        public GameState AddIfNeighbour(KeyboardNames key, ISet<KeyboardNames> taken)
+        public GameState Move(KeyboardNames key,  KeyboardNames food)
         {
             if (KeyboardLayout.Instance.IllegalKeys.Contains(key))
             {
                 return GameState.Lost;
             }
-            if (taken.Contains(key))
+            if (this.CurrentSnake.Contains(key))
             {
                 return GameState.Lost;
             }
-
-            if (!KeyboardLayout.Instance[this.Head].Contains(key))
-            {
-                return GameState.Lost;
+            if (this.CurrentSnake.Count > 10) {
+                return GameState.Won;
             }
 
-            this.ChangeHead(key);
+            if (key != food)
+            {
+                ClearLighting(this.CurrentSnake.First());
+                this.CurrentSnake.RemoveAt(0);
+            }
+
+            SetLighting(this.Head, this.color, 50);
+            this.CurrentSnake.Add(key);
+            SetLighting(key, this.color, 100);
+
             return GameState.Continue;
         }
-
-        public GameState CanMove(ISet<KeyboardNames> taken)
-        {
-            if (KeyboardLayout.Instance[this.Head].Except(KeyboardLayout.Instance.IllegalKeys).All(taken.Contains))
-            {
-                return GameState.Lost;
-            }
-            return GameState.Continue;
-        }
+        
     }
 }
