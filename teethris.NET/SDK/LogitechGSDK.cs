@@ -211,6 +211,9 @@ namespace LedCSharp
             throw new InvalidOperationException("You shouldn't be here, not a valid player color !");
         }
 
+        public static bool ClearLighting(KeyboardNames keyCode) 
+            => LogiLedSetLightingForKeyWithKeyName(keyCode, 0, 0, 0);
+
         [DllImport("LogitechLedEnginesWrapper ", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool LogiLedSaveLightingForKey(KeyboardNames keyName);
 

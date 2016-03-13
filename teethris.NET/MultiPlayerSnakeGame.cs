@@ -1,4 +1,4 @@
-﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="Game.cs">
+﻿// <copyright company="Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD" file="MultiPlayerSnakeGame.cs">
 // Copyright 2014-2016 Oswald MASKENS, Boris GORDTS, Tom EELBODE, Zoë PETARD
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -14,11 +14,11 @@ using teethris.NET.SDK;
 
 namespace teethris.NET
 {
-    public class Game : IGame
+    public class MultiPlayerSnakeGame : IGame
     {
         public static void Main()
         {
-            Engine.Run<Game>();
+            Engine.Run<MultiPlayerSnakeGame>();
         }
 
         private Snake player;

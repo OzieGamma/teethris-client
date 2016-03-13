@@ -105,6 +105,7 @@ namespace teethris.NET.SDK
                 throw new LogitechException("Logitech engineers ...");
             }
 
+            
             LogiLedSaveCurrentLighting();
             LogiLedSetLighting(0, 0, 0);
 
