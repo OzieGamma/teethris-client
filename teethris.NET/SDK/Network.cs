@@ -61,6 +61,10 @@ namespace teethris.NET.SDK
             });
             this.socket.Emit(ReadyChannel, "ready");
         }
+        
+        public void UnReady(){
+            this.socket.Emit(ReadyChannel, "unready");
+        }
 
         public void SendKey(KeyboardNames key)
         {

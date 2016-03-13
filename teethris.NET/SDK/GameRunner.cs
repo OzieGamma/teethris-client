@@ -12,6 +12,7 @@ using System;
 using System.Threading;
 using LedCSharp;
 using static LedCSharp.LogitechGSDK;
+using System.Threading.Tasks;
 
 namespace teethris.NET.SDK
 {
@@ -24,6 +25,7 @@ namespace teethris.NET.SDK
         private MessageNetwork network;
 
         private bool active;
+        private bool initing;
 
         /// <summary>
         ///     Event handler for a pressed key
@@ -39,7 +41,6 @@ namespace teethris.NET.SDK
         {
             Console.WriteLine($"Key pressed {key}");
 
-
             if (this.active)
             {
                 this.network.SendKey(key);
@@ -53,7 +54,15 @@ namespace teethris.NET.SDK
                 }
                 return false;
             }
-            if (key == KeyboardNames.ESC)
+            if(this.initing){
+                if (key == KeyboardNames.ESC)
+                {
+                    this.initing = false;
+                    this.EndGame();
+                }
+                return false;
+            }
+            if (this.initing == false && key == KeyboardNames.ESC)
             {
                 this.NewGame();
                 return false;
@@ -99,7 +108,7 @@ namespace teethris.NET.SDK
         private void NewGame()
         {
             Console.WriteLine("Begin of the game !");
-
+            this.initing = true;
 
             if (!LogiLedInit())
             {
@@ -116,23 +125,40 @@ namespace teethris.NET.SDK
 
             this.network = new MessageNetwork(this.KeyRecieved, Uri);
 
+            new Task(WaitForStart).Start();
+        }
+        
+        private void WaitForStart(){
+            Console.WriteLine("Waiting for start");
+            
             // Wait to be assigned an id
             while (this.network.Id == -1)
             {
-                Console.WriteLine("Waiting for ID");
+                if(this.initing == true){
+                    Console.WriteLine("Waiting for ID");
+                } else {
+                    return;
+                }
                 Thread.Sleep(2);
             }
             
             // Wait for the countdown
             while (!this.network.Ready)
             {
-                Console.WriteLine("Waiting for ready signal");
-                Thread.Sleep(2);
+                if(this.initing == true){
+                    Console.WriteLine("Waiting for ready signal");
+                } else {
+                    this.network.UnReady();
+                    Console.WriteLine("Stopping waiting for ready...");
+                    return;
+                }
+                Thread.Sleep(200);
             }
-
+            
             Animations.Start();
 
             this.game.Init(this.network.Id);
+            this.initing = false;
             this.active = true;
         }
 
