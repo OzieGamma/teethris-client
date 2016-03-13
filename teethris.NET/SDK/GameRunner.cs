@@ -108,6 +108,8 @@ namespace teethris.NET.SDK
             
             LogiLedSaveCurrentLighting();
             LogiLedSetLighting(0, 0, 0);
+            Console.WriteLine("Waiting for keyboard...");
+            Thread.Sleep(5000);
 
             this.game = new T();
 
