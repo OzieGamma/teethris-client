@@ -18,7 +18,7 @@ namespace teethris.NET.SDK
     public class GameRunner<T> where T : class, IGame, new()
     {
         private static readonly Uri Uri = new Uri("http://borisjeltsin.azurewebsites.net");
-            //new Uri("http://localhost:3000/");//
+        //new Uri("http://localhost:3000/");//
 
         private T game;
         private MessageNetwork network;
@@ -42,7 +42,11 @@ namespace teethris.NET.SDK
 
             if (this.active)
             {
-                this.network.SendKey(key);
+                if (this.MultiPlayer)
+                {
+                    this.network.SendKey(key);
+                }
+
                 if (key == KeyboardNames.ESC)
                 {
                     this.EndGame();
@@ -67,13 +71,16 @@ namespace teethris.NET.SDK
 
             if (this.active)
             {
-                if (key == KeyboardNames.ESC)
+                if (this.MultiPlayer)
                 {
-                    this.AcknowledgeState(GameState.Won);
-                }
-                else
-                {
-                    this.AcknowledgeState(this.game.KeyReceived(key));
+                    if (key == KeyboardNames.ESC)
+                    {
+                        this.AcknowledgeState(GameState.Won);
+                    }
+                    else
+                    {
+                        this.AcknowledgeState(this.game.KeyReceived(key));
+                    }
                 }
             }
         }
@@ -106,43 +113,58 @@ namespace teethris.NET.SDK
                 throw new LogitechException("Logitech engineers ...");
             }
 
-            
+
             LogiLedSaveCurrentLighting();
             LogiLedSetLighting(0, 0, 0);
 
             this.game = new T();
 
-            this.network = new MessageNetwork(this.KeyRecieved, Uri);
+            if (this.MultiPlayer)
+            {
+                this.network = new MessageNetwork(this.KeyRecieved, Uri);
 
-            // Wait to be assigned an id
-            while (this.network.Id == -1)
-            {
-                Console.WriteLine("Waiting for ID");
-                Thread.Sleep(2);
-            }
-            
-            // Wait for the countdown
-            while (!this.network.Ready)
-            {
-                Console.WriteLine("Waiting for ready signal");
-                Thread.Sleep(2);
+                // Wait to be assigned an id
+                while (this.network.Id == -1)
+                {
+                    Console.WriteLine("Waiting for ID");
+                    Thread.Sleep(2);
+                }
+
+                // Wait for the countdown
+                while (!this.network.Ready)
+                {
+                    Console.WriteLine("Waiting for ready signal");
+                    Thread.Sleep(2);
+                }
             }
 
             Animations.Start();
 
-            this.game.Init(this.network.Id);
+            this.game.Init(this.MultiPlayer ? this.network.Id : 0);
+
             this.active = true;
         }
 
         private void EndGame()
         {
             Console.WriteLine("End of the game !");
-            this.game = null;
-            this.network.Dispose();
+
+            if (this.MultiPlayer)
+            {
+                this.game = null;
+                this.network.Dispose();
+                this.network = null;
+            }
+            else
+            {
+                this.game = null;
+            }
             this.active = false;
 
             LogiLedRestoreLighting();
             LogiLedShutdown();
         }
+
+        private bool MultiPlayer => this.game.GameType == GameType.MultiPlayer;
     }
 }
